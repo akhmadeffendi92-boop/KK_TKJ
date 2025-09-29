@@ -1,1 +1,919 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Komprehensif Load Balancing TKJ 12</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        /* --- Bright Theme (Kuning & Hitam) --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fef3c7; /* Kuning Paling Cerah (Kuning 100) */
+            /* Pola Titik Subtil */
+            background-image:
+                radial-gradient(#fcd34d 1px, transparent 1px); /* Kuning 300 */
+            background-size: 40px 40px;
+            overflow-y: auto; 
+            padding: 20px;
+        }
 
+        .main-container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 0 auto;
+            background-color: #fffbeb; /* Kuning Pucat (Yellow 50) - Konten Utama */
+            padding: 30px;
+            border-radius: 1.5rem;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1); 
+            color: #1f2937; /* Teks default Hitam Gelap */
+        }
+
+        /* Styling for Content */
+        .content h1 {
+            color: #d97706; /* Amber 600 */
+        }
+        .content h2 {
+            font-size: 1.875rem; 
+            font-weight: 800;
+            color: #f59e0b; /* Amber 500 */
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #f59e0b; 
+        }
+        /* H3 menggunakan warna Hitam untuk kontras maksimal */
+        .content h3 {
+            font-size: 1.5rem; 
+            font-weight: 700;
+            color: #000000; /* Hitam Murni */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .content p, .content li, .content table, .case-description {
+            line-height: 1.75;
+            color: #1f2937; /* Teks Utama Hitam */
+        }
+        
+        /* --- TABEL KONTRAST FIX --- */
+        .content th, .content td {
+            border: 1px solid #e5e7eb; /* Abu-abu terang */
+            padding: 0.75rem;
+            text-align: left;
+            background-color: #fffbeb;
+        }
+        .content th {
+            background-color: #fcd34d; /* Kuning 300 */
+            font-weight: 700;
+            color: #1f2937; /* Hitam */
+        }
+        
+        /* Card Backgrounds (Menggunakan warna cerah yang berbeda) */
+        .p-4.my-4.bg-gray-50 { 
+            background-color: #f3f4f6; /* Abu-abu Sangat Terang */
+            border-left-color: #9ca3af; 
+            color: #1f2937;
+        }
+        .bg-sky-50 { 
+            background-color: #e0f7fa; /* Cyan Pucat */
+            border-left-color: #0ea5e9; 
+            color: #1f2937;
+        }
+        .bg-pink-50 { 
+            background-color: #fce7f3; /* Pink Pucat */
+            border-left-color: #ec4899; 
+            color: #1f2937;
+        }
+        .bg-amber-50 { 
+            background-color: #fff7ed; /* Amber Pucat */
+            border-left-color: #f59e0b; 
+            color: #1f2937;
+        }
+        .bg-indigo-50 { 
+            background-color: #eef2ff; /* Indigo Pucat */
+            border-left-color: #6366f1; 
+            color: #1f2937;
+        }
+        .bg-yellow-50 { 
+            background-color: #fffbeb; /* Kuning Paling Pucat */
+            border-left-color: #fde047; 
+            color: #1f2937;
+        }
+        .bg-green-50 { 
+            background-color: #ecfdf5; /* Hijau Pucat */
+            border-left-color: #10b981; 
+            color: #1f2937;
+        }
+        
+        /* Memastikan list item dan paragraph di dalam card tetap hitam */
+        .bg-sky-50 p, .bg-sky-50 li,
+        .bg-pink-50 p, .bg-pink-50 li,
+        .bg-amber-50 p, .bg-amber-50 li,
+        .bg-indigo-50 p, .bg-indigo-50 li,
+        .bg-yellow-50 p, .bg-yellow-50 li,
+        .bg-green-50 p, .bg-green-50 li {
+            color: #1f2937 !important;
+        }
+
+
+        /* Simulation Status Box (Light Mode) */
+        .bg-gray-50.rounded-xl.shadow-inner { background-color: #fcd34d; border: 1px solid #f59e0b; }
+        #narration { color: #1f2937; }
+        #startButton { 
+            background-color: #f59e0b; /* Amber 500 */
+            color: white;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); 
+        }
+
+        /* Network Node Styles (Light Mode) */
+        .network-node {
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #1f2937; /* Default text black */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .network-node svg { color: #1f2937; }
+
+        #client-node { background-color: #e0f2f1; border-color: #2dd4bf; }
+        #gateway-node { background-color: #fef9c3; border-color: #facc15; }
+        #internet-node { background-color: #f3f4f6; border-color: #d1d5db; }
+        #isp-a-node { background-color: #e0f2f1; border-color: #2dd4bf; }
+        #isp-b-node { background-color: #dcfce7; border-color: #4ade80; }
+
+        .lb-router { width: 200px; height: 120px; }
+        .wan-line { 
+            flex-grow: 1; 
+            height: 4px; 
+            background-color: #9ca3af; /* Abu-abu garis */
+        }
+        .network-node strong { font-weight: 700; }
+        .network-node span { font-size: 0.8rem; }
+        .network-node .bg-red-800 { 
+            background-color: #fef2f2; 
+            color: #ef4444; 
+            font-weight: bold;
+        }
+        
+        /* Packet visibility fix (Bright Mode) */
+        .packet {
+            background-color: #f59e0b; /* Amber 500 */
+            box-shadow: 0 0 10px #f59e0b;
+            color: white; /* Putih pada paket cerah untuk visibilitas */
+            padding: 4px 8px;
+            border-radius: 4px;
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all linear;
+        }
+
+        /* Case Interactive Styles (Bright Mode Adjustments) */
+        .case-card {
+            background-color: #ffffff !important; /* White Card */
+            border-color: #e5e7eb !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            color: #1f2937;
+        }
+        .text-red-700 { color: #b91c1c !important; }
+        .text-blue-700 { color: #1d4ed8 !important; }
+        .text-green-700 { color: #059669 !important; }
+        .text-purple-700 { color: #7c3aed !important; }
+
+        /* Ensure card background has a clear border */
+        .bg-red-50, .bg-blue-50, .bg-green-50, .bg-purple-50 {
+            background-color: #ffffff !important;
+            border: 2px solid;
+            transition: all 0.2s;
+        }
+        .bg-red-50 { border-color: #fca5a5 !important; }
+        .bg-blue-50 { border-color: #93c5fd !important; }
+        .bg-green-50 { border-color: #6ee7b7 !important; }
+        .bg-purple-50 { border-color: #d8b4fe !important; }
+
+        .title-red { color: #ef4444; }
+        .title-blue { color: #3b82f6; }
+        .title-green { color: #10b981; }
+        .title-purple { color: #a855f7; }
+
+        .option-button {
+            background-color: #f3f4f6 !important; /* Light Gray for options */
+            color: #1f2937 !important; /* Dark Text */
+            border: 1px solid #e5e7eb;
+        }
+        .option-button:hover:not(:disabled) {
+            background-color: #f59e0b !important; /* Amber hover */
+            color: white !important; /* White text on hover */
+        }
+        .success {
+            background-color: #d1fae5; color: #065f46; border: 1px solid #34d399;
+        }
+        .error {
+            background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171;
+        }
+        
+        @media (max-width: 768px) {
+            .flow-diagram { flex-direction: column; align-items: center; }
+            .line { width: 4px; height: 50px; margin: 10px 0; }
+            .network-node { width: 80%; margin-bottom: 15px; }
+        }
+        .wan-line { flex-grow: 0; width: 50px; margin: 0; align-self: flex-end; }
+    </style>
+</head>
+<body>
+
+<div class="main-container content">
+    <h1 class="text-4xl font-extrabold text-center mb-2">Menerapkan Konfigurasi dan Pengujian Load Balancing</h1>
+    <p class="text-center text-xl text-gray-700 mb-8">Materi Komprehensif TKJ Kelas 12: Analog, Simulasi, dan **20 Studi Kasus Interaktif**</p>
+
+    <!-- --- Bagian Pengantar: Definisi, Fungsi, Kelebihan/Kekurangan, Manfaat (LOAD BALANCING) --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>Pengantar Komprehensif Load Balancing</h2>
+    
+    <div class="p-4 my-4 bg-gray-50 rounded-lg border-l-4 border-gray-500 text-black">
+        <h3>Apa Itu Load Balancing?</h3>
+        <p>Secara sederhana, **Load Balancing** adalah teknik untuk mendistribusikan beban lalu lintas jaringan ke dua atau lebih jalur koneksi (**ISP/Gateway**) secara merata atau berdasarkan aturan tertentu. Tujuan utamanya adalah mencegah terjadinya kelebihan beban (bottleneck) pada satu jalur dan meningkatkan **redundansi** (ketersediaan jalur cadangan).</p>
+        <p>Dalam konteks router, Load Balancing memanfaatkan teknik **Mangle** (penandaan paket) dan **Routing** yang canggih untuk mengarahkan trafik keluar melalui berbagai *interface* WAN.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 my-6">
+        <!-- CARD 1: Fungsi Utama Load Balancing -->
+        <div class="p-4 bg-sky-50 rounded-lg border-l-4 border-sky-500 text-black">
+            <h3>Fungsi Utama Load Balancing</h3>
+            <ul class="ml-6 mt-2 space-y-2">
+                <li>**Distribus Traffic (PCC/NTH):** Membagi beban koneksi antar link ISP (misalnya 50:50, 60:40, atau per *type of service*).</li>
+                <li>**Redundansi (Failover):** Jika satu jalur ISP terputus, secara otomatis seluruh trafik dialihkan ke jalur ISP yang masih aktif.</li>
+                <li>**Peningkatan Bandwidth:** Menggabungkan kapasitas bandwidth dari dua atau lebih jalur ISP.</li>
+                <li>**Reliabilitas:** Memastikan layanan internet tetap berjalan meskipun terjadi gangguan pada salah satu penyedia layanan.</li>
+            </ul>
+        </div>
+
+        <!-- CARD 2: Kelebihan dan Kekurangan -->
+        <div class="p-4 bg-pink-50 rounded-lg border-l-4 border-pink-500 text-black">
+            <h3>Kelebihan dan Kekurangan</h3>
+            
+            <h4 class="font-semibold mt-2">Kelebihan:</h4>
+            <ul class="ml-6 mt-1 space-y-1 list-disc text-sm">
+                <li>**Uptime Maksimal:** Meminimalisir downtime internet (via Failover).</li>
+                <li>**Kinerja Optimal:** Memanfaatkan total bandwidth yang tersedia.</li>
+                <li>**Scalability:** Mudah menambah jalur koneksi seiring bertambahnya kebutuhan pengguna.</li>
+            </ul>
+
+            <h4 class="font-semibold mt-3">Kekurangan:</h4>
+            <ul class="ml-6 mt-1 space-y-1 list-disc text-sm">
+                <li>**Kompleksitas Konfigurasi:** Membutuhkan pemahaman mendalam tentang Mangle dan Advanced Routing.</li>
+                <li>**Sesi Gagal (PCC Error):** Beberapa layanan perbankan/VPN bisa terputus jika satu sesi koneksi dipecah ke dua jalur berbeda.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CARD 3: Manfaat TKJ -->
+    <div class="p-4 my-4 bg-amber-50 rounded-lg border-l-4 border-amber-500 text-black">
+        <h3>Manfaat Mempelajari Materi Ini (Untuk TKJ)</h3>
+        <p>Load Balancing adalah skill level lanjut yang sangat dibutuhkan di industri:</p>
+        <ul class="ml-6 mt-2 space-y-2">
+            <li>**Network Engineer Handal:** Mampu merancang infrastruktur jaringan yang tahan banting (robust) dan berkinerja tinggi.</li>
+            <li>**Optimasi Jaringan:** Menguasai teknik Mangle dan Routing untuk memprioritaskan atau membagi trafik secara cerdas (misal: trafik game ke ISP A, trafik kantor ke ISP B).</li>
+            <li>**High Availability System:** Mampu menjamin ketersediaan internet 24/7, sebuah tuntutan mutlak untuk perusahaan modern.</li>
+        </ul>
+    </div>
+
+
+    <!-- --- Bagian 1: Tiga Alur Cerita (Analog) Load Balancing --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>1. Tiga Alur Cerita (Analog) Load Balancing</h2>
+    
+    <p class="text-lg font-semibold text-gray-700 mb-4">Mari kita pahami tiga konsep utama dalam Load Balancing melalui analogi sehari-hari:</p>
+
+    <!-- CARD 4: Analog 1: PCC -->
+    <div class="p-4 my-4 bg-indigo-50 rounded-lg border-l-4 border-indigo-500 text-black">
+        <h3>A. Analog 1: Kasir Supermarket (Fokus: PCC / Per-Connection Classifier)</h3>
+        <p>Bayangkan Anda berada di supermarket dengan dua kasir (**ISP A dan ISP B**). Semua pelanggan (**Koneksi**) akan melalui pintu masuk tunggal (Router Gateway).</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Mangle (Petugas Pengarah):** Petugas ini memiliki aturan: "Pelanggan Ganjil (Koneksi ke-1, ke-3, ke-5) harus ke Kasir A. Pelanggan Genap (Koneksi ke-2, ke-4, ke-6) harus ke Kasir B."</li>
+            <li>**Keuntungan:** Beban antrean terbagi rata 50:50. Namun, setiap pelanggan (koneksi) akan tetap di jalur yang sama hingga selesai.</li>
+            <li>**Kesimpulan:** Teknik **PCC** memastikan satu sesi koneksi (misalnya saat login bank) tidak terpecah, tetapi koneksi berikutnya dari pengguna yang sama diarahkan ke jalur ISP lain.</li>
+        </ul>
+    </div>
+    
+    <!-- CARD 5: Analog 2: Failover -->
+    <div class="p-4 my-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500 text-black">
+        <h3>B. Analog 2: Jalan Tol Puncak (Fokus: Failover / Redundansi)</h3>
+        <p>Kota Anda memiliki dua jalur menuju kota tujuan: Jalan Utama (**ISP 1**) dan Jalan Alternatif (**ISP 2**). Jalan Alternatif hanya digunakan jika Jalan Utama macet parah atau ditutup.</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Check Gateway (Pengecek Status):** Ada sistem yang terus-menerus mengecek status Jalan Utama (Ping Gateway ISP 1).</li>
+            <li>**Failover:** Jika Jalan Utama dinyatakan 'Down' (Ping Gagal), semua GPS diaktifkan untuk mengalihkan rute ke Jalan Alternatif (**ISP 2**).</li>
+            <li>**Kesimpulan:** **Failover** adalah konfigurasi di mana satu jalur menjadi primer (utama) dan jalur lainnya menjadi sekunder (cadangan). Ini penting untuk *uptime* (ketersediaan) jaringan.</li>
+        </ul>
+    </div>
+    
+    <!-- CARD 6: Analog 3: Policy-Based Routing -->
+    <div class="p-4 my-4 bg-green-50 rounded-lg border-l-4 border-green-500 text-black">
+        <h3>C. Analog 3: Pemberian Prioritas (Fokus: Policy-Based Routing)</h3>
+        <p>Anda mengelola dua jalur pengiriman barang: Jalur Cepat Berbayar (**ISP A Bandwidth Tinggi**) dan Jalur Ekonomi (**ISP B Bandwidth Rendah**).</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Marking (Pemberi Label):** Paket data (barang) diberi label terlebih dahulu di router: 'Label A' untuk trafik VoIP/Zoom, 'Label B' untuk trafik *download* film.</li>
+            <li>**Policy:** Router memiliki kebijakan: *Semua paket berlabel A harus menggunakan Jalur Cepat Berbayar (ISP A)*. *Semua paket berlabel B menggunakan Jalur Ekonomi (ISP B)*.</li>
+            <li>**Kesimpulan:** **Policy-Based Routing** memungkinkan administrator jaringan untuk memisahkan jenis trafik dan mengarahkan mereka ke jalur ISP yang paling optimal (misalnya, memisahkan trafik sensitif latensi ke ISP yang lebih stabil).</li>
+        </ul>
+    </div>
+
+
+    <!-- --- Bagian 2: Simulasi Interaktif Load Balancing --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2 class="text-center">2. Simulasi Interaktif: Alur Data Load Balancing (PCC 50:50)</h2>
+    <p class="text-center text-lg text-gray-700 mb-6">Lihat bagaimana router membagi dua koneksi berbeda ke **ISP A** dan **ISP B** secara bergantian.</p>
+
+    <div class="p-6 bg-gray-50 rounded-xl shadow-inner mb-8">
+        <div id="flow-diagram" class="flow-diagram flex justify-center items-center relative min-h-[300px]">
+
+            <!-- 1. PC Klien (LAN) -->
+            <div id="client-node" class="network-node bg-indigo-200 text-black border-2 border-indigo-400 w-1/5">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-4 1V5c0-1.1.9-2 2-2h.93a2 2 0 001.66.9l1.66 2.88-2.66 1.44zM14.25 17L15 20l4 1V5c0-1.1-.9-2-2-2h-.93a2 2 0 00-1.66.9l-1.66 2.88 2.66 1.44z"></path></svg>
+                <strong class="text-lg">PC Klien</strong>
+                <span class="text-sm">IP Privat (LAN): 192.168.1.100</span>
+            </div>
+
+            <!-- Line LAN ke Router -->
+            <div id="line-lan" class="line w-1/6 wan-line"></div>
+
+            <!-- 2. LB Router -->
+            <div id="gateway-node" class="network-node lb-router bg-yellow-200 text-black border-2 border-yellow-500 relative">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7m8 4v-4m-6 4a2 2 0 100-4 2 2 0 000 4zm-2 4h4m-4 4h4m6-4a2 2 0 100-4 2 2 0 000 4zm-2 4h4m-4 4h4"></path></svg>
+                <strong class="text-lg">LB Router</strong>
+                <span class="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded mt-1">MANGLE & ROUTING</span>
+                <span class="text-sm mt-1">ISP A & ISP B</span>
+            </div>
+            
+            <!-- Link WAN (ISP A & B) -->
+            <div class="absolute right-[15%] top-1/2 -mt-[50px] flex flex-col w-[35%] h-[120px] justify-between">
+                <!-- ISP A -->
+                <div class="flex items-center">
+                    <div id="line-wan-a" class="line wan-line bg-sky-400"></div>
+                    <div id="isp-a-node" class="network-node bg-sky-100 text-black border border-sky-400 p-2 w-[100px] h-[50px]">
+                        <span class="text-sm font-semibold">ISP A</span>
+                        <span class="text-xs">10.10.10.2</span>
+                    </div>
+                </div>
+                <!-- ISP B -->
+                <div class="flex items-center">
+                    <div id="line-wan-b" class="line wan-line bg-green-400"></div>
+                    <div id="isp-b-node" class="network-node bg-green-100 text-black border border-green-400 p-2 w-[100px] h-[50px]">
+                        <span class="text-sm font-semibold">ISP B</span>
+                        <span class="text-xs">20.20.20.2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Internet Cloud -->
+            <div id="internet-node" class="network-node internet-cloud bg-gray-200 text-black border-2 border-gray-400 absolute right-0">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0113 14h3m-3-12h3M9 17.5V17a4 4 0 00-4-4H3m9 4v-2m1.048 0H16m-4 2h.01M17 19h2m-1 1v2m-1 2h2m-1-4V7m2 2h2m-1 2V9m-4 4v2m1-2H7m-1 2h2m-1 2v-2"></path></svg>
+                <strong class="text-sm">Internet</strong>
+            </div>
+
+        </div>
+        
+        <!-- Area Status / Narasi -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-300 min-h-[80px] mt-4">
+            <strong class="text-amber-600">Status Jaringan:</strong>
+            <p id="narration" class="mt-1 text-gray-900 font-medium">Tekan tombol di bawah untuk memulai simulasi dua koneksi secara bergantian (Load Balancing PCC).</p>
+        </div>
+
+        <button id="startButton" class="w-full mt-6 py-3 px-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg shadow-lg shadow-amber-500/50 transition duration-200">
+            MULAI SIMULASI LOAD BALANCING
+        </button>
+    </div>
+
+    <!-- --- Bagian 3: Troubleshooting Kasus Nyata (Teori) --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>3. Kategori Masalah Load Balancing</h2>
+    <p>Permasalahan Load Balancing sering dikelompokkan berdasarkan komponen konfigurasinya:</p>
+
+    <!-- Table A: Masalah Routing & Failover -->
+    <h3>A. Masalah Redundansi & Failover</h3>
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th>Masalah Spesifik</th>
+                <th>Gejala/Dampak</th>
+                <th>Solusi Diagnosis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>**Gagal Failover**</td>
+                <td>ISP A mati, tetapi trafik tidak pindah ke ISP B; Internet mati total.</td>
+                <td>**Check Netwatch** atau **Scope/Target** pada Default Route, pastikan **Check Gateway** aktif.</td>
+            </tr>
+            <tr>
+            <td>**Route Tidak Dinamis**</td>
+                <td>Setelah ISP A hidup lagi, trafik tidak kembali (failback) ke ISP A.</td>
+                <td>Periksa **Distance** pada Route Table (ISP Primer Distance lebih kecil dari Sekunder).</td>
+            </tr>
+             <tr>
+                <td>**Blackhole Routing**</td>
+                <td>Ada dua Default Route aktif tanpa *check-gateway*, paket dikirim ke ISP mati.</td>
+                <td>Pastikan hanya Route yang **Reachable** yang aktif, gunakan **Routing Mark** pada Firewall Mangle.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table B: Masalah Marking & Kinerja -->
+    <h3>B. Masalah Mangle, PCC, & Kinerja</h3>
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th>Masalah Spesifik</th>
+                <th>Gejala/Dampak</th>
+                <th>Solusi Diagnosis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>**Split Session (PCC Error)**</td>
+                <td>Gagal login ke bank/VPN, padahal browsing normal.</td>
+                <td>Pastikan Mangle Rule PCC hanya menandai **'new connection'** dan bukan paket balasan (*reply*).</td>
+            </tr>
+            <tr>
+                <td>**Trafik Berat di Satu ISP**</td>
+                <td>Penggunaan bandwidth 80:20 padahal ingin 50:50.</td>
+                <td>Cek kembali **PCC Selector** (*src-address* dan *dst-address*), kemungkinan tidak merata.</td>
+            </tr>
+            <tr>
+                <td>**Return Packet Error**</td>
+                <td>Klien bisa kirim data, tapi tidak dapat balasan (Internet sangat lambat/timeout).</td>
+                <td>Pastikan rule **NAT Masquerade** sudah dibuat untuk **kedua** interface WAN.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- --- Bagian 4: Latihan Interaktif (20 STUDI KASUS) --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>4. Latihan Interaktif: Uji Diagnosa 20 Studi Kasus Load Balancing</h2>
+
+    <p class="text-lg text-gray-700 mb-6 font-semibold">Tantangan! Pilih satu tindakan diagnosis/konfigurasi yang paling tepat untuk memecahkan setiap kasus Load Balancing. Ada 20 kasus berbeda yang harus Anda selesaikan.</p>
+
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4" id="study-cases">
+        
+        <!-- 20 Studi Kasus akan dirender di sini oleh JS -->
+
+    </div>
+
+    <h3 class="mt-12">Rangkuman Pola Pikir Troubleshooting Load Balancing (5 Langkah)</h3>
+    <ol class="list-decimal pl-6 mt-4 space-y-2 text-black">
+        <li>**Verify Redundancy (Verifikasi Cadangan):** Cabut salah satu kabel ISP. Apakah *failover* berjalan otomatis?</li>
+        <li>**Isolate Link (Isolasi Jalur):** Cek dengan **ping** dan **traceroute** dari router. Pastikan kedua ISP (Gateway) sama-sama *reachable*.</li>
+        <li>**Monitor Mangle (Pantau Penandaan):** Cek *counters* di Firewall Mangle. Pastikan jumlah *bytes* terbagi merata sesuai target (50:50).</li>
+        <li>**Test Routing (Uji Rute):** Pastikan ada dua Default Route dan keduanya menggunakan **Routing Mark** yang berbeda, serta memiliki *check-gateway*.</li>
+        <li>**Test Application (Uji Aplikasi):** Coba akses aplikasi sensitif (bank, VPN). Jika gagal, fokus perbaikan pada rule PCC/Mangle.</li>
+    </ol>
+
+</div>
+
+<script>
+    // --- JavaScript untuk Simulasi Load Balancing (Bagian 2) ---
+
+    const narration = document.getElementById('narration');
+    const startButton = document.getElementById('startButton');
+    const flowDiagram = document.getElementById('flow-diagram');
+    
+    // Coordinates setup for Load Balancing (Complex Diagram)
+    const getCoords = (id) => {
+        const rect = document.getElementById(id).getBoundingClientRect();
+        const flowRect = flowDiagram.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2 - flowRect.left,
+            y: rect.top + rect.height / 2 - flowRect.top
+        };
+    };
+
+    const getIspCoords = (id) => {
+        const ispNode = document.getElementById(id);
+        const rect = ispNode.getBoundingClientRect();
+        const flowRect = flowDiagram.getBoundingClientRect();
+        // Since ISP nodes are smaller and positioned on the side, we adjust
+        return {
+            x: rect.left - flowRect.left, // Left side of ISP node
+            y: rect.top + rect.height / 2 - flowRect.top
+        };
+    };
+
+    async function startSimulation() {
+        startButton.disabled = true;
+        startButton.textContent = 'SIMULASI BERLANGSUNG... (Koneksi 1/2)';
+        narration.textContent = 'Koneksi 1: Klien memulai koneksi ke Internet.';
+
+        const clientC = getCoords('client-node');
+        const gatewayC = getCoords('gateway-node');
+        const internetC = getCoords('internet-node');
+        const ispAC = getIspCoords('isp-a-node');
+        const ispBC = getIspCoords('isp-b-node');
+
+        // --- KONEKSI 1: Lewat ISP A (Ganjil) ---
+        const packet1 = createPacket('192.168.1.100', '8.8.4.4', 'Conn 1');
+        flowDiagram.appendChild(packet1);
+        
+        // 1. Klien -> Gateway
+        await animatePacket(packet1, clientC.x, clientC.y, gatewayC.x, gatewayC.y, 1500);
+        
+        narration.innerHTML = `**[KONEKSI 1: MARKING]** Router menandai koneksi ini dengan **Mark-A (Ganjil)**.`;
+        packet1.style.backgroundColor = '#0ea5e9'; // Sky blue
+        document.getElementById('gateway-node').style.boxShadow = '0 0 15px #0ea5e9';
+        await delay(1000);
+
+        // 2. Gateway -> ISP A
+        // Calculate adjusted position for ISP A entry point on the line
+        const ispAEntryPointX = gatewayC.x + (ispAC.x - gatewayC.x) * 0.45;
+        await animatePacket(packet1, gatewayC.x, gatewayC.y, ispAEntryPointX, ispAC.y, 1500);
+        document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        document.getElementById('isp-a-node').style.boxShadow = '0 0 10px #0ea5e9';
+
+        // 3. ISP A -> Internet
+        narration.innerHTML = `**[KONEKSI 1: ISP A]** Trafik keluar melalui ISP A (10.10.10.2).`;
+        await animatePacket(packet1, ispAEntryPointX, ispAC.y, internetC.x, internetC.y, 2000);
+        document.getElementById('isp-a-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        packet1.remove();
+
+
+        await delay(1500);
+        startButton.textContent = 'SIMULASI BERLANGSUNG... (Koneksi 2/2)';
+        narration.textContent = 'Koneksi 2: Klien memulai koneksi baru.';
+
+        // --- KONEKSI 2: Lewat ISP B (Genap) ---
+        const packet2 = createPacket('192.168.1.100', '1.1.1.1', 'Conn 2');
+        flowDiagram.appendChild(packet2);
+
+        // 1. Klien -> Gateway
+        await animatePacket(packet2, clientC.x, clientC.y, gatewayC.x, gatewayC.y, 1500);
+
+        narration.innerHTML = `**[KONEKSI 2: MARKING]** Router menandai koneksi ini dengan **Mark-B (Genap)**.`;
+        packet2.style.backgroundColor = '#4ade80'; // Green Neon
+        document.getElementById('gateway-node').style.boxShadow = '0 0 15px #4ade80';
+        await delay(1000);
+
+        // 2. Gateway -> ISP B
+        const ispBEntryPointX = gatewayC.x + (ispBC.x - gatewayC.x) * 0.45;
+        await animatePacket(packet2, gatewayC.x, gatewayC.y, ispBEntryPointX, ispBC.y, 1500);
+        document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        document.getElementById('isp-b-node').style.boxShadow = '0 0 10px #4ade80';
+
+        // 3. ISP B -> Internet
+        narration.innerHTML = `**[KONEKSI 2: ISP B]** Trafik keluar melalui ISP B (20.20.20.2).`;
+        await animatePacket(packet2, ispBEntryPointX, ispBC.y, internetC.x, internetC.y, 2000);
+        document.getElementById('isp-b-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        packet2.remove();
+
+        narration.textContent = 'Simulasi selesai. Load Balancing (PCC) berhasil membagi beban 50:50.';
+        startButton.disabled = false;
+        startButton.textContent = 'ULANGI SIMULASI LOAD BALANCING';
+    }
+
+    function createPacket(sourceIp, destIp, label) {
+        const packet = document.createElement('div');
+        packet.className = 'packet';
+        packet.textContent = label;
+        packet.setAttribute('data-source-ip', sourceIp);
+        packet.setAttribute('data-dest-ip', destIp);
+        packet.setAttribute('data-label', label);
+        return packet;
+    }
+
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function animatePacket(element, startX, startY, endX, endY, duration) {
+        // Set initial position
+        element.style.left = `${startX - element.offsetWidth / 2}px`;
+        element.style.top = `${startY - element.offsetHeight / 2}px`;
+        element.style.transitionDuration = `${duration}ms`;
+
+        await delay(50);
+        
+        // Set final position to start the animation
+        element.style.left = `${endX - element.offsetWidth / 2}px`;
+        element.style.top = `${endY - element.offsetHeight / 2}px`;
+        
+        return delay(duration);
+    }
+
+    startButton.addEventListener('click', startSimulation);
+
+    // Initial positioning setup
+    window.addEventListener('load', () => {
+        // Run initial simulation once for immediate visual feedback
+        startSimulation().then(() => {
+            // Clean up any lingering packets if the flow was interrupted
+            const packets = document.querySelectorAll('.packet');
+            packets.forEach(p => p.remove());
+
+            narration.textContent = 'Tekan tombol di bawah untuk memulai simulasi dua koneksi secara bergantian (Load Balancing PCC).';
+            startButton.disabled = false;
+            startButton.textContent = 'MULAI SIMULASI LOAD BALANCING';
+            document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        });
+    });
+
+
+    // --- JavaScript untuk 20 Studi Kasus Interaktif (Bagian 4) ---
+
+    const studyCasesData = [
+        // KELOMPOK 1: MANGLE & PCC CONFIGURATION
+        {
+            id: 1, title: "1. PCC Tidak Berfungsi (Mangle)", color: 'red',
+            description: "Semua trafik keluar hanya melewati ISP A, padahal rule Mangle PCC 2/0 dan 2/1 sudah dibuat.",
+            options: [
+                { text: "Periksa Chain pada Mangle Rule, pastikan menggunakan 'prerouting'", isCorrect: true, feedback: "Tepat! Penandaan koneksi/paket (Mangle) harus terjadi sebelum proses Routing, yaitu pada chain 'prerouting'." },
+                { text: "Hapus rule NAT Masquerade ISP B", isCorrect: false, feedback: "Salah. Masalahnya adalah trafik tidak pernah mencapai ISP B karena routing/marking gagal." },
+                { text: "Tambahkan distance 10 pada route ISP A", isCorrect: false, feedback: "Salah. Distance hanya berlaku untuk failover, bukan pembagian PCC." }
+            ]
+        },
+        {
+            id: 2, title: "2. Gagal Login Bank (Split Session)", color: 'red',
+            description: "Situs web biasa normal, tetapi setiap kali login ke aplikasi perbankan, sesi terputus/gagal di tengah jalan.",
+            options: [
+                { text: "Pastikan Mangle Rule PCC hanya menandai 'new connection' dan bukan paket balasan (*reply*)", isCorrect: true, feedback: "Tepat! Sesi login terpecah (*split session*). Ini terjadi karena paket balasan dari server (yang harusnya ke ISP A) dipecah/dialihkan ke ISP B." },
+                { text: "Hapus semua rule QoS", isCorrect: false, feedback: "Salah. QoS membatasi bandwidth, bukan memutus sesi yang sensitif." },
+                { text: "Ubah IP Address Gateway ISP B", isCorrect: false, feedback: "Salah. Ini tidak ada hubungannya dengan integritas sesi koneksi." }
+            ]
+        },
+        {
+            id: 3, title: "3. Trafik Tidak Rata (PCC Selector)", color: 'red',
+            description: "Trafik ISP A 70% dan ISP B 30%, padahal ingin 50:50. Pengguna sama-sama menggunakan jaringan secara acak.",
+            options: [
+                { text: "Cek kembali *Selector* PCC (contoh: *src-address* dan *dst-address*), kemungkinan tidak merata", isCorrect: true, feedback: "Tepat! Pembagian tidak merata mengindikasikan bahwa *hash function* pada PCC *selector* tidak efektif membagi koneksi secara acak 50:50." },
+                { text: "Restart Gateway setiap 1 jam", isCorrect: false, feedback: "Salah. Ini hanya solusi sementara, bukan perbaikan konfigurasi dasar." },
+                { text: "Ganti kabel WAN ISP A", isCorrect: false, feedback: "Salah. Masalahnya bukan kecepatan, melainkan pembagian lalu lintas." }
+            ]
+        },
+        {
+            id: 4, title: "4. Penggunaan NTH yang Salah", color: 'red',
+            description: "Mencoba Load Balancing dengan NTH (N-th) 2,1 dan 2,2 tetapi hasilnya selalu hanya ISP 1 yang terpakai.",
+            options: [
+                { text: "Pastikan NTH Count sudah mencakup semua paket yang ditandai, dan cek urutan rule Mangle", isCorrect: true, feedback: "Tepat! NTH (N-th) bekerja berdasarkan jumlah paket (bukan koneksi). Pastikan *total* paket yang ditandai (misalnya, total 2) dan *paket ke-* (misalnya, paket ke-1 dan ke-2) sudah benar." },
+                { text: "Tambahkan NAT untuk IP Private LAN", isCorrect: false, feedback: "Salah. NAT tidak mempengaruhi proses penandaan paket NTH." },
+                { text: "Ganti jenis koneksi dari PPPoE ke DHCP Client", isCorrect: false, feedback: "Salah. Jenis koneksi WAN tidak mempengaruhi rule NTH." }
+            ]
+        },
+        {
+            id: 5, title: "5. Return Packet Lambat", color: 'red',
+            description: "Klien dapat mengirim permintaan ke internet, tetapi balasan (return packet) dari internet sangat lambat (*delay*).",
+            options: [
+                { text: "Cek Mangle Rule untuk memastikan koneksi balasan (**connection-mark**) diarahkan ke jalur yang sama", isCorrect: true, feedback: "Tepat! Koneksi balasan harus diarahkan ke jalur ISP tempat permintaan awal dikirim. Jika *connection-mark* tidak diatur, balasan bisa salah rute." },
+                { text: "Upgrade lisensi Mikrotik", isCorrect: false, feedback: "Salah. Ini adalah masalah konfigurasi dasar routing/marking." },
+                { text: "Blokir port 80 pada Firewall", isCorrect: false, feedback: "Salah. Ini akan mematikan browsing, bukan memperbaiki kecepatan balasan." }
+            ]
+        },
+
+        // KELOMPOK 2: ROUTING & FAILOVER
+        {
+            id: 6, title: "6. ISP Down, Tetap Dipakai (Netwatch)", color: 'blue',
+            description: "Kabel ISP A putus, tapi router masih mengirim paket ke ISP A, menyebabkan internet mati total.",
+            options: [
+                { text: "Aktifkan fungsi **Check Gateway** (misal: ping ke DNS) pada kedua Default Route", isCorrect: true, feedback: "Tepat! Tanpa *Check Gateway*, router mengira jalur ISP A masih *reachable* (walaupun gateway ping gagal), yang menyebabkan *blackhole* routing." },
+                { text: "Ubah address pool DHCP", isCorrect: false, feedback: "Salah. Masalah ada di layer 3 (routing) WAN." },
+                { text: "Hapus rule Firewall Filter yang memblokir ICMP", isCorrect: false, feedback: "Salah. Ini tidak membantu router mendeteksi jalur down." }
+            ]
+        },
+        {
+            id: 7, title: "7. Failback Tidak Otomatis", color: 'blue',
+            description: "ISP A (Primary) sempat mati dan pindah ke ISP B. Setelah ISP A hidup lagi, semua trafik tetap di ISP B.",
+            options: [
+                { text: "Periksa **Distance** pada Default Route, pastikan ISP A memiliki Distance yang lebih rendah", isCorrect: true, feedback: "Tepat! Agar failback otomatis, Route ISP A harus memiliki Distance lebih rendah (misalnya 1) daripada ISP B (misalnya 2)." },
+                { text: "Ganti semua kabel LAN di kantor", isCorrect: false, feedback: "Salah. Ini masalah layer 3/4." },
+                { text: "Hapus Mangle Rule PCC", isCorrect: false, feedback: "Salah. PCC dan Failover berjalan independen, tetapi Distance yang mengontrol failback." }
+            ]
+        },
+        {
+            id: 8, title: "8. Ping Gagal Setelah Pindah ISP", color: 'blue',
+            description: "Saat failover ke ISP B, klien bisa browsing tapi ping ke IP publik tertentu (misal: 10.10.10.1) gagal.",
+            options: [
+                { text: "Cek Firewall Filter Rule pada ISP B, kemungkinan ICMP diblokir", isCorrect: true, feedback: "Tepat! ISP B mungkin memiliki kebijakan keamanan yang lebih ketat, memblokir paket ICMP (ping) masuk/keluar dari interface WAN-nya." },
+                { text: "Hapus rule NAT Masquerade ISP A", isCorrect: false, feedback: "Salah. Ini tidak ada hubungannya dengan ISP B." },
+                { text: "Ubah metode Load Balancing ke NTH", isCorrect: false, feedback: "Salah. Metode LB tidak mempengaruhi blokir ping." }
+            ]
+        },
+        {
+            id: 9, title: "9. Server Internal Tak Terakses (Dua ISP)", color: 'blue',
+            description: "Server Web internal di-port forward dari ISP A. Saat ISP B aktif, port forward server itu jadi tidak bisa diakses.",
+            options: [
+                { text: "Server internal harus di-port forward di kedua ISP jika kedua jalur dipakai untuk masuk", isCorrect: true, feedback: "Tepat! Jika Anda ingin server diakses melalui jalur Failover, Destination NAT (dst-nat) harus dikonfigurasi pada IP Publik kedua ISP." },
+                { text: "Tambah IP Private di Server", isCorrect: false, feedback: "Salah. Server hanya perlu 1 IP Private." },
+                { text: "Hapus Default Route yang ada", isCorrect: false, feedback: "Salah. Ini akan mematikan internet total." }
+            ]
+        },
+        {
+            id: 10, title: "10. Masalah Sesi Koneksi (Marking Gagal)", color: 'blue',
+            description: "Setelah 5 menit, koneksi klien sering mati dan harus *refresh* browser, padahal link fisik stabil.",
+            options: [
+                { text: "Periksa kembali Mangle Rule. Pastikan mark koneksi yang dibuat sudah digunakan dalam *Routing Rule*", isCorrect: true, feedback: "Tepat! Jika penandaan koneksi hilang setelah beberapa waktu, berarti mark koneksi (*connection-mark*) tidak bertahan dan router salah merutekan paket balasan." },
+                { text: "Ganti Router dengan spesifikasi lebih tinggi", isCorrect: false, feedback: "Salah. Ini adalah masalah logika konfigurasi, bukan hardware." },
+                { text: "Blokir semua port TCP/UDP", isCorrect: false, feedback: "Salah. Ini tindakan keamanan yang terlalu ekstrem." }
+            ]
+        },
+
+        // KELOMPOK 3: POLICY & ADVANCED ROUTING
+        {
+            id: 11, title: "11. Policy Based Routing Gagal", color: 'green',
+            description: "Sudah membuat Mangle untuk mengarahkan trafik IP tertentu (misalnya 192.168.1.50) ke ISP B, tapi trafik tetap ke ISP A.",
+            options: [
+                { text: "Pastikan Route Table memiliki route dengan **Routing Mark** yang sesuai dengan Mangle Rule", isCorrect: true, feedback: "Tepat! Mangle hanya memberi label. Router harus memiliki Route Static/Dynamic yang spesifik untuk label (Routing Mark) tersebut." },
+                { text: "Ubah IP Address klien 192.168.1.50", isCorrect: false, feedback: "Salah. Perubahan IP tidak memperbaiki masalah routing mark." },
+                { text: "Tambahkan NAT Masquerade ISP A", isCorrect: false, feedback: "Salah. NAT ISP A sudah ada, masalahnya adalah klien tidak pernah ke ISP B." }
+            ]
+        },
+        {
+            id: 12, title: "12. Paket VoIP Jelek", color: 'green',
+            description: "Panggilan VoIP melalui internet sering terputus atau suaranya teredam, padahal trafik dibagi 50:50.",
+            options: [
+                { text: "Buat Policy-Based Routing: tandai trafik VoIP dan arahkan seluruhnya ke ISP yang paling stabil (latensi terendah)", isCorrect: true, feedback: "Tepat! Trafik sensitif latensi seperti VoIP sebaiknya tidak dibagi (Load Balanced), tetapi diarahkan secara total (*policy-based*) ke jalur yang paling prima." },
+                { text: "Nonaktifkan NAT Masquerade", isCorrect: false, feedback: "Salah. NAT diperlukan untuk koneksi keluar." },
+                { text: "Hapus semua rule QoS", isCorrect: false, feedback: "Salah. QoS/Prioritas mungkin diperlukan, tetapi routing yang salah adalah penyebab utama." }
+            ]
+        },
+        {
+            id: 13, title: "13. Bandwidth Habis di Tengah Proses", color: 'green',
+            description: "Trafik dibagi 50:50. ISP A 10 Mbps dan ISP B 100 Mbps. Trafik yang melewati ISP A selalu lambat.",
+            options: [
+                { text: "Ubah metode Load Balancing dari 50:50 (PCC 2/0, 2/1) menjadi *Ratio* yang sesuai (misal: PCC 11/0 untuk A dan 11/1 sampai 11/10 untuk B)", isCorrect: true, feedback: "Tepat! Load Balancing harus menggunakan perbandingan rasio sesuai bandwidth (misal: 10:100 = 1:10), bukan pembagian koneksi 50:50." },
+                { text: "Matikan ISP A", isCorrect: false, feedback: "Salah. Solusinya adalah optimasi, bukan mematikan sumber daya." },
+                { text: "Aktifkan STP (Spanning Tree Protocol)", isCorrect: false, feedback: "Salah. STP adalah masalah layer 2." }
+            ]
+        },
+        {
+            id: 14, title: "14. Routing Mark Konflik", color: 'green',
+            description: "Setelah membuat Policy-Based Routing baru, Load Balancing PCC yang lama berhenti bekerja.",
+            options: [
+                { text: "Cek urutan Mangle Rule; pastikan rule yang spesifik (Policy) berada di atas rule yang umum (PCC)", isCorrect: true, feedback: "Tepat! Mangle Rule dibaca dari atas ke bawah. Rule yang lebih spesifik harus diprioritaskan di atas rule PCC yang memproses semua trafik lainnya." },
+                { text: "Ubah IP LAN menjadi /16", isCorrect: false, feedback: "Salah. Ini tidak menyelesaikan konflik rule." },
+                { text: "Hapus semua NAT Masquerade", isCorrect: false, feedback: "Salah. NAT diperlukan untuk koneksi keluar." }
+            ]
+        },
+        {
+            id: 15, title: "15. Koneksi Lintas Jaringan (VRF)", color: 'green',
+            description: "Jaringan ingin memisahkan manajemen (ISP A) dan klien (ISP B) secara virtual, tanpa saling melihat.",
+            options: [
+                { text: "Gunakan fitur **VRF (Virtual Routing and Forwarding)** untuk mengisolasi tabel routing antar grup", isCorrect: true, feedback: "Tepat! VRF adalah solusi advance untuk membuat beberapa tabel routing virtual di satu router, memisahkan trafik secara logis." },
+                { text: "Buat VLAN yang sama di kedua ISP", isCorrect: false, feedback: "Salah. VLAN hanya memisahkan layer 2." },
+                { text: "Atur DNS Server 8.8.8.8 di kedua ISP", isCorrect: false, feedback: "Salah. Ini tidak ada hubungannya dengan pemisahan virtual." }
+            ]
+        },
+        
+        // KELOMPOK 4: HARDWARE, KEAMANAN & PENGUJIAN
+        {
+            id: 16, title: "16. Overload Saat Mangle", color: 'purple',
+            description: "Setiap kali rule Mangle PCC diaktifkan, CPU router melonjak menjadi 90-100%.",
+            options: [
+                { text: "Ganti Router dengan hardware yang memiliki CPU lebih kuat, karena proses Mangle/PCC memakan resource tinggi", isCorrect: true, feedback: "Tepat! Mangle dan PCC adalah proses yang sangat intensif, dan router dengan spesifikasi rendah akan cepat mencapai batas CPU." },
+                { text: "Hapus semua rule Firewall Filter", isCorrect: false, feedback: "Salah. Firewall Filter tidak membebani seberat Mangle." },
+                { text: "Ubah IP ISP menjadi IP Static", isCorrect: false, feedback: "Salah. Tidak ada pengaruhnya terhadap beban CPU Mangle." }
+            ]
+        },
+        {
+            id: 17, title: "17. Pengujian Kinerja Gagal (Speedtest)", color: 'purple',
+            description: "Saat diuji, Speedtest selalu menunjukkan bandwidth hanya dari satu ISP, padahal Load Balancing aktif 50:50.",
+            options: [
+                { text: "Wajar. Speedtest menggunakan satu koneksi besar yang akan diarahkan ke satu ISP oleh PCC", isCorrect: true, feedback: "Tepat! PCC membagi berdasarkan koneksi. Karena Speedtest adalah satu koneksi, ia akan selalu diarahkan ke satu jalur saja. Untuk menguji total bandwidth, gunakan *download manager* atau tes multi-thread." },
+                { text: "Nonaktifkan Firewall Filter Rule", isCorrect: false, feedback: "Salah. Firewall tidak membatasi koneksi tunggal." },
+                { text: "Tambah rule Mangle lagi dengan PCC 3/0, 3/1, 3/2", isCorrect: false, feedback: "Salah. Ini hanya akan memecah koneksi ke tiga jalur, tetapi tes tetap menunjukkan bandwidth tunggal." }
+            ]
+        },
+        {
+            id: 18, title: "18. Failover Terlalu Lama", color: 'purple',
+            description: "Saat ISP down, butuh waktu 30 detik untuk pindah ke ISP cadangan.",
+            options: [
+                { text: "Kurangi interval **Check Gateway** (misal: dari 10s menjadi 3s) pada Default Route", isCorrect: true, feedback: "Tepat! Waktu failover ditentukan oleh seberapa cepat router mendeteksi jalur mati melalui parameter *Check Gateway* (Netwatch interval)." },
+                { text: "Ganti port ethernet ISP", isCorrect: false, feedback: "Salah. Ini masalah konfigurasi waktu deteksi." },
+                { text: "Hapus semua NAT Masquerade", isCorrect: false, feedback: "Salah. NAT tidak memengaruhi kecepatan failover." }
+            ]
+        },
+        {
+            id: 19, title: "19. Paket Berantakan (Out-of-Order)", color: 'purple',
+            description: "Trafik dibagi 50:50, tetapi aplikasi streaming video sering menunjukkan artefak (*glitches*) dan *buffering*.",
+            options: [
+                { text: "Wajar, ini disebabkan oleh paket yang tiba tidak berurutan (*out-of-order*) dari dua ISP, dan sistem penerima kesulitan menyatukannya", isCorrect: true, feedback: "Tepat! Menggabungkan paket dari dua jalur dengan latensi berbeda dapat menyebabkan *out-of-order packet*. Solusi terbaik adalah Policy-Based Routing (arahkan trafik sensitif ke satu ISP saja)." },
+                { text: "Blokir port 80 dan 443", isCorrect: false, feedback: "Salah. Ini mematikan browsing, bukan memperbaiki urutan paket." },
+                { text: "Tambahkan distance 100 pada semua route", isCorrect: false, feedback: "Salah. Distance yang tinggi hanya memperlambat deteksi." }
+            ]
+        },
+        {
+            id: 20, title: "20. Tes Kebalikan (NAT Check)", color: 'purple',
+            description: "Setelah konfigurasi Load Balancing, Anda ingin memastikan semua IP Private LAN bisa keluar melalui kedua ISP. Bagaimana cara cepatnya?",
+            options: [
+                { text: "Lakukan **traceroute** dari klien ke IP tujuan di internet, pastikan jalur keluar berganti-ganti (ISP A, ISP B)", isCorrect: true, feedback: "Tepat! Traceroute akan menunjukkan IP Gateway ISP mana yang digunakan oleh paket. Ini adalah cara paling efektif menguji Load Balancing dan NAT." },
+                { text: "Cek Mangle Rule di chain forward", isCorrect: false, feedback: "Salah. Mangle untuk LB ada di *prerouting*." },
+                { text: "Lakukan ping ke Google", isCorrect: false, feedback: "Salah. Ping hanya menguji konektivitas, bukan jalur mana yang digunakan." }
+            ]
+        },
+    ];
+
+    const studyCasesContainer = document.getElementById('study-cases');
+
+    // Function to render the interactive cases
+    function renderStudyCases() {
+        studyCasesContainer.innerHTML = ''; 
+
+        studyCasesData.forEach(caseData => {
+            const card = document.createElement('div');
+            // Determine Tailwind background and text colors based on case color
+            let bgClass = '';
+            let borderClass = '';
+            let titleClass = '';
+
+            // Grouping by color for visual consistency
+            if (caseData.id <= 5) {
+                bgClass = 'bg-red-50'; borderClass = 'border-red-500'; titleClass = 'title-red'; 
+            } else if (caseData.id <= 10) {
+                bgClass = 'bg-blue-50'; borderClass = 'border-blue-500'; titleClass = 'title-blue';
+            } else if (caseData.id <= 15) {
+                bgClass = 'bg-green-50'; borderClass = 'border-green-500'; titleClass = 'title-green';
+            } else {
+                bgClass = 'bg-purple-50'; borderClass = 'border-purple-500'; titleClass = 'title-purple';
+            }
+
+
+            card.className = `case-card ${bgClass} border p-4 rounded-xl`;
+            card.innerHTML = `
+                <h4 class="font-bold text-lg ${titleClass} mb-2">${caseData.title}</h4>
+                <p class="text-sm case-description mb-3 text-gray-700">${caseData.description}</p>
+                <p class="font-bold text-amber-600 text-sm mb-2">Pilih Tindakan Diagnosis/Konfigurasi Terbaik:</p>
+                <div class="options-container flex flex-col space-y-2 mb-3" id="options-${caseData.id}">
+                    ${caseData.options.map((option, index) => `
+                        <button 
+                            class="option-button w-full text-left py-2 px-3 rounded-lg shadow-sm text-xs font-medium"
+                            data-case-id="${caseData.id}"
+                            data-correct="${option.isCorrect}"
+                            data-feedback="${option.feedback}"
+                            data-option-index="${index}"
+                        >
+                            ${option.text}
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-container mt-auto" id="feedback-${caseData.id}">
+                    <!-- Feedback will appear here -->
+                </div>
+            `;
+            studyCasesContainer.appendChild(card);
+        });
+
+        // Attach event listeners after rendering
+        document.querySelectorAll('.option-button').forEach(button => {
+            button.addEventListener('click', handleCaseSelection);
+        });
+    }
+
+    // Function to handle the selection logic
+    function handleCaseSelection(event) {
+        const button = event.target;
+        const caseId = button.getAttribute('data-case-id');
+        const isCorrect = button.getAttribute('data-correct') === 'true';
+        const feedbackText = button.getAttribute('data-feedback');
+        const optionsContainer = document.getElementById(`options-${caseId}`);
+        const feedbackContainer = document.getElementById(`feedback-${caseId}`);
+        
+        // Disable all buttons after one choice
+        optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+            btn.disabled = true;
+            btn.style.backgroundColor = '#e5e7eb'; // Light gray background
+            btn.style.boxShadow = 'none';
+            btn.style.color = '#4b5563';
+        });
+
+        // Apply feedback based on correctness
+        if (isCorrect) {
+            button.style.backgroundColor = '#10b981'; // Green-500
+            button.style.color = 'white';
+            feedbackContainer.innerHTML = `<div class="feedback-box success">✔️ Jawaban Benar! ${feedbackText}</div>`;
+        } else {
+            button.style.backgroundColor = '#ef4444'; // Red-500
+            button.style.color = 'white';
+            feedbackContainer.innerHTML = `<div class="feedback-box error">❌ Jawaban Salah. ${feedbackText}</div>`;
+
+            // Highlight the correct answer
+            optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                if (btn.getAttribute('data-correct') === 'true') {
+                    btn.style.border = '2px solid #10b981'; 
+                    btn.style.backgroundColor = '#d1fae5'; /* Lighter success background */
+                    btn.style.color = '#065f46';
+                }
+            });
+        }
+    }
+
+    // Render the study cases when the window loads
+    window.addEventListener('load', renderStudyCases);
+
+</script>
+</body>
+</html>
