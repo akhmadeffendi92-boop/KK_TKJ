@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Komprehensif Internet Gateway TKJ 12</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+        .main-container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        /* Styling for Content */
+        .content h2 {
+            font-size: 1.875rem; 
+            font-weight: 800;
+            color: #1f2937; 
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #f59e0b; 
+        }
+        .content h3 {
+            font-size: 1.5rem; 
+            font-weight: 700;
+            color: #374151; 
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .content p, .content li, .content table, .case-description {
+            line-height: 1.75;
+            color: #4b5563; 
+        }
+        .content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .content th, .content td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .content th {
+            background-color: #eff6ff;
+            font-weight: 600;
+            color: #1d4ed8; 
+        }
+        
+        /* --- Simulation Specific Styles (Retained) --- */
+        .network-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+            min-height: 120px;
+            justify-content: center;
+            text-align: center;
+        }
+        .packet {
+            width: 25px;
+            height: 25px;
+            background-color: #10b981; 
+            border-radius: 50%;
+            position: absolute;
+            transition: all 1.5s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 10px #10b981;
+            z-index: 10;
+        }
+        .internet-cloud {
+            background-color: #bfdbfe; 
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            text-align: center;
+        }
+        .line {
+            height: 4px;
+            background-color: #9ca3af; 
+            flex-grow: 1;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        /* Case Interactive Styles */
+        .case-card {
+            border-radius: 0.75rem;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            min-height: 350px;
+        }
+        .option-button {
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .option-button:hover:not(:disabled) {
+            background-color: #fcd34d; /* yellow-300 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .feedback-box {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        .success {
+            background-color: #d1fae5; 
+            color: #065f46; 
+            border: 1px solid #34d399;
+        }
+        .error {
+            background-color: #fee2e2; 
+            color: #991b1b; 
+            border: 1px solid #f87171;
+        }
+
+        /* Responsiveness for mobile */
+        @media (max-width: 768px) {
+            .flow-diagram {
+                flex-direction: column;
+                align-items: center;
+            }
+            .line {
+                width: 4px;
+                height: 50px;
+                margin: 10px 0;
+            }
+            .network-node {
+                width: 80%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container content">
+    <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-2">Memahami dan Menyelesaikan Permasalahan Internet Gateway</h1>
+    <p class="text-center text-xl text-gray-500 mb-8">Materi Komprehensif TKJ Kelas 12: Analog, Simulasi, dan **20 Studi Kasus Interaktif**</p>
+
+    <!-- --- Bagian Pengantar: Definisi, Fungsi, Kelebihan/Kekurangan, Manfaat (BARU) --- -->
+    <hr class="border-t-2 border-indigo-500 my-6">
+    <h2>Pengantar Komprehensif Internet Gateway</h2>
+    
+    <div class="p-4 my-4 bg-gray-50 rounded-lg border-l-4 border-gray-500">
+        <h3>Apa Itu Internet Gateway?</h3>
+        <p>Secara sederhana, **Internet Gateway** (atau hanya **Gateway**) adalah perangkat (biasanya Router) yang bertindak sebagai pintu gerbang atau gerbang transit antara dua jaringan yang menggunakan protokol komunikasi berbeda, utamanya jaringan lokal (**LAN**) dan jaringan global (**Internet/WAN**).</p>
+        <p>Gateway adalah alamat IP yang harus dituju oleh setiap komputer di LAN agar bisa keluar dari jaringan lokal. Tanpa Gateway, data dari PC Anda tidak akan tahu cara mencapai dunia luar.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 my-6">
+        <div class="p-4 bg-sky-50 rounded-lg border-l-4 border-sky-500">
+            <h3>Fungsi Utama Internet Gateway</h3>
+            <ul class="ml-6 mt-2 space-y-2">
+                <li>**Network Address Translation (NAT):** Mengubah IP Privat (yang hanya berlaku di LAN) menjadi satu atau beberapa IP Publik yang dikenal di Internet.</li>
+                <li>**Routing:** Menentukan jalur terbaik atau alamat tujuan (Next-Hop) untuk setiap paket data, baik yang masuk maupun yang keluar.</li>
+                <li>**Firewall & Security:** Bertindak sebagai garis pertahanan pertama untuk memblokir lalu lintas yang tidak sah (inbound) dan mengontrol lalu lintas yang diizinkan (outbound).</li>
+                <li>**Quality of Service (QoS):** Mengelola dan memprioritaskan lalu lintas data (misalnya: memprioritaskan suara VoIP daripada *download*).</li>
+            </ul>
+        </div>
+
+        <div class="p-4 bg-pink-50 rounded-lg border-l-4 border-pink-500">
+            <h3>Kelebihan dan Kekurangan</h3>
+            
+            <h4 class="font-semibold mt-2">Kelebihan:</h4>
+            <ul class="ml-6 mt-1 space-y-1 list-disc text-sm">
+                <li>**Efisiensi IP:** Memungkinkan ribuan perangkat menggunakan satu IP Publik (melalui NAT).</li>
+                <li>**Kontrol Sentral:** Semua trafik terpusat, mempermudah manajemen dan keamanan.</li>
+                <li>**Keamanan:** Melindungi jaringan lokal dari serangan luar.</li>
+            </ul>
+
+            <h4 class="font-semibold mt-3">Kekurangan:</h4>
+            <ul class="ml-6 mt-1 space-y-1 list-disc text-sm">
+                <li>**Single Point of Failure:** Jika Gateway mati, seluruh jaringan akan kehilangan koneksi Internet.</li>
+                <li>**Beban Kerja:** Dapat menjadi *bottleneck* performa jika terlalu banyak trafik tanpa spesifikasi hardware yang memadai (CPU/RAM).</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="p-4 my-4 bg-amber-50 rounded-lg border-l-4 border-amber-500">
+        <h3>Manfaat Mempelajari Materi Ini (Untuk TKJ)</h3>
+        <p>Menguasai Internet Gateway bukan hanya tentang menghafal, tetapi tentang kompetensi nyata:</p>
+        <ul class="ml-6 mt-2 space-y-2">
+            <li>**Troubleshooting Profesional:** Anda dapat secara logis mengisolasi masalah (apakah di klien, di Gateway, atau di ISP) dan menyelesaikannya dengan cepat.</li>
+            <li>**Desain Jaringan:** Anda mampu merancang jaringan yang stabil, aman, dan efisien (misalnya, merancang skema NAT dan QoS yang optimal).</li>
+            <li>**Keamanan Siber:** Anda dapat mengimplementasikan Firewall Rule yang ketat untuk melindungi aset-aset digital perusahaan atau sekolah.</li>
+        </ul>
+    </div>
+
+
+    <!-- --- Bagian 1: Tiga Alur Cerita (Analog) Internet Gateway --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>1. Tiga Alur Cerita (Analog) Internet Gateway</h2>
+    
+    <p class="text-lg font-semibold text-gray-800 mb-4">Agar lebih maksimal, mari kita lihat peran Internet Gateway dari tiga sudut pandang berbeda: penerjemah, perantara, dan petugas keamanan.</p>
+
+    <div class="p-4 my-4 bg-indigo-50 rounded-lg border-l-4 border-indigo-500">
+        <h3>A. Analog 1: Resepsionis Hotel (Fokus: NAT/Pergantian Alamat)</h3>
+        <p>Bayangkan Anda adalah tamu di sebuah hotel besar (**LAN**). Semua kamar memiliki nomor lokal (**IP Private**). Hotel ini hanya memiliki satu nomor telepon publik (**IP Public** Gateway) yang dihubungi dari luar (**Internet**).</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Saat Anda (Kamar 101) menelepon keluar:** Resepsionis (**NAT**) mencatat 'Kamar 101' di papan pemanggil, lalu menyambungkan panggilan Anda menggunakan jalur telepon publik hotel.</li>
+            <li>**Saat balasan datang:** Penelepon luar membalas ke nomor publik hotel. Resepsionis (**NAT**) melihat catatan ('Kamar 101') dan langsung meneruskan panggilan masuk itu ke kamar Anda.</li>
+            <li>**Kesimpulan:** Resepsionis (NAT) memastikan ribuan kamar dengan nomor pribadi (IP Private) bisa menggunakan satu jalur telepon publik (IP Public) secara bersamaan tanpa tertukar.</li>
+        </ul>
+    </div>
+    
+    <div class="p-4 my-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+        <h3>B. Analog 2: Gerbang Tol Utama (Fokus: Routing/Arah Tujuan)</h3>
+        <p>Jaringan komputer Anda adalah sebuah kota. Di kota ini ada banyak jalan lokal (**Router Internal**), tetapi hanya ada satu **Gerbang Tol Utama** (**Gateway**) menuju jalan raya antarnegara (**Internet**).</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Saat paket data datang:** Gerbang Tol (Gateway) menerima paket data dari jalan raya, kemudian ia melihat alamat tujuan.</li>
+            <li>**Keputusan Routing:** Jika alamat tujuan paket adalah 'Sekolah Sebelah' (Subnet lain), Gerbang Tol akan tahu harus mengirimnya ke 'Jalan Timur' (**Static Route**). Jika alamatnya 'Google.com' (Luar negeri/alamat tak dikenal), ia akan mengirimkannya ke 'Jalan Raya Internet' (**Default Route**).</li>
+            <li>**Kesimpulan:** Gateway berfungsi sebagai penunjuk arah utama. Ia tahu ke mana harus mengirim paket yang ditujukan ke luar, maupun paket yang kembali dari luar.</li>
+        </ul>
+    </div>
+    
+    <div class="p-4 my-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+        <h3>C. Analog 3: Petugas Keamanan Bank (Fokus: Firewall/Keamanan)</h3>
+        <p>Internet Gateway adalah **Petugas Keamanan** yang menjaga pintu masuk ke area sensitif (**LAN** Anda). Setiap orang dari luar (**Internet**) yang ingin masuk harus melalui pemeriksaan ketat.</p>
+        
+        <ul class="ml-6 mt-2 space-y-1 text-sm">
+            <li>**Aturan Dasar:** Keamanan (**Firewall**) memiliki aturan ketat: *Semua orang dari luar dilarang masuk, kecuali mereka yang sudah diundang/membalas panggilan dari dalam.* (Ini adalah fungsi *Stateful Firewall* default).</li>
+            <li>**Port yang Terbuka:** Jika Anda menjalankan Web Server internal, Petugas Keamanan akan membuka sedikit celah (Port 80/443) khusus untuk trafik yang diizinkan (**Destination NAT/Port Forwarding**).</li>
+            <li>**Kesimpulan:** Gateway adalah garis pertahanan pertama. Ia memblokir akses yang tidak diminta dan mengontrol jenis komunikasi apa saja yang boleh melewati batas jaringan Anda.</li>
+        </ul>
+    </div>
+
+
+    <!-- --- Bagian 2: Simulasi Interaktif Gateway --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2 class="text-center">2. Simulasi Interaktif: Alur Data Melalui Gateway (NAT)</h2>
+    <p class="text-center text-lg text-gray-700 mb-6">Lihat bagaimana **Sekretaris NAT** bekerja secara nyata, mengubah IP Privat Anda menjadi IP Publik agar bisa diakses dunia luar.</p>
+
+    <div class="p-6 bg-gray-50 rounded-xl shadow-inner mb-8">
+        <div id="flow-diagram" class="flow-diagram flex justify-between items-center relative min-h-[200px]">
+
+            <!-- 1. PC Klien (LAN) -->
+            <div id="client-node" class="network-node bg-indigo-200 text-indigo-900 border-2 border-indigo-400">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-4 1V5c0-1.1.9-2 2-2h.93a2 2 0 001.66.9l1.66 2.88-2.66 1.44zM14.25 17L15 20l4 1V5c0-1.1-.9-2-2-2h-.93a2 2 0 00-1.66.9l-1.66 2.88 2.66 1.44z"></path></svg>
+                <strong class="text-lg">PC Klien</strong>
+                <span class="text-sm">IP Privat (LAN): 192.168.1.100</span>
+            </div>
+
+            <div id="line-lan" class="line"></div>
+
+            <!-- 2. Gateway Router -->
+            <div id="gateway-node" class="network-node bg-yellow-200 text-yellow-900 border-2 border-yellow-500 w-1/3 md:w-1/4 relative">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7m8 4v-4m-6 4a2 2 0 100-4 2 2 0 000 4zm-2 4h4m-4 4h4m6-4a2 2 0 100-4 2 2 0 000 4zm-2 4h4m-4 4h4"></path></svg>
+                <strong class="text-lg">Internet Gateway (Router)</strong>
+                <span class="text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded mt-1">NAT & FIREWALL</span>
+                <span class="text-sm mt-1">IP Publik (WAN): 203.0.113.5</span>
+            </div>
+
+            <div id="line-wan" class="line"></div>
+
+            <!-- 3. Internet -->
+            <div id="internet-node" class="network-node internet-cloud bg-blue-100 text-blue-900 border-2 border-blue-400">
+                <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0113 14h3m-3-12h3M9 17.5V17a4 4 0 00-4-4H3m9 4v-2m1.048 0H16m-4 2h.01M17 19h2m-1 1v2m-1 2h2m-1-4V7m2 2h2m-1 2V9m-4 4v2m1-2H7m-1 2h2m-1 2v-2"></path></svg>
+                <strong class="text-lg">Internet</strong>
+                <span class="text-sm">Server Tujuan: 8.8.8.8</span>
+            </div>
+        </div>
+        
+        <!-- Area Status / Narasi -->
+        <div class="bg-white p-4 rounded-lg border border-gray-300 min-h-[80px] mt-4">
+            <strong class="text-gray-700">Status Jaringan:</strong>
+            <p id="narration" class="mt-1 text-gray-800 font-medium">Tekan tombol di bawah untuk memulai simulasi permintaan browsing ke Internet.</p>
+        </div>
+
+        <button id="startButton" class="w-full mt-6 py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg transition duration-200">
+            MULAI SIMULASI KONEKSI
+        </button>
+    </div>
+
+    <!-- --- Bagian 3: Troubleshooting Kasus Nyata (Teori) --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>3. Kategori Masalah Internet Gateway</h2>
+    <p>Permasalahan Gateway sering dikelompokkan berdasarkan area yang terdampak:</p>
+
+    <!-- Table A remains as it was -->
+    <h3>A. Masalah Kinerja (Performance & Latency)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Masalah Spesifik</th>
+                <th>Gejala/Dampak</th>
+                <th>Alat Diagnosis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>**Bandwidth Bottleneck**</td>
+                <td>Kecepatan unduh/unggah rendah saat banyak pengguna aktif.</td>
+                <td>**Bandwidth Monitor**, **Speedtest**</td>
+            </tr>
+            <tr>
+            <td>**Latensi Tinggi (Lagging)**</td>
+                <td>Waktu respons (ping) yang besar.</td>
+                <td>**ping**, **traceroute/tracert**</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table B remains as it was -->
+    <h3>B. Masalah Fungsionalitas (Koneksi & Servis)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Masalah Spesifik</th>
+                <th>Gejala/Dampak</th>
+                <th>Alat Diagnosis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>**DNS/DHCP Error**</td>
+                <td>Tidak bisa browsing nama domain, atau klien gagal dapat IP.</td>
+                <td>**nslookup**, **Cek DHCP Lease**</td>
+            </tr>
+            <tr>
+                <td>**Firewall/NAT Error**</td>
+                <td>Koneksi ke situs spesifik diblokir, atau koneksi aman (HTTPS) gagal.</td>
+                <td>**Cek Firewall Rule**, **Mangle Rule (MTU/MSS)**</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- --- Bagian 4: Latihan Interaktif (20 STUDI KASUS) --- -->
+    <hr class="border-t-2 border-amber-500 my-6">
+    <h2>4. Latihan Interaktif: Uji Diagnosa 20 Studi Kasus</h2>
+
+    <p class="text-lg text-gray-700 mb-6 font-semibold">Tantangan! Pilih satu tindakan diagnosis yang paling tepat untuk memecahkan setiap kasus. Ada 20 kasus berbeda yang harus Anda selesaikan.</p>
+
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4" id="study-cases">
+        
+        <!-- 20 Studi Kasus akan dirender di sini oleh JS -->
+
+    </div>
+
+    <h3 class="mt-12">Rangkuman Pola Pikir Troubleshooting (5 Langkah)</h3>
+    <ol class="list-decimal pl-6 mt-4 space-y-2">
+        <li>**Verify (Verifikasi):** Pastikan masalahnya ada. Coba sendiri. Tanyakan: "Apakah semua user terpengaruh, atau hanya user/perangkat tertentu?"</li>
+        <li>**Isolate (Isolasi):** Tentukan di mana masalahnya berada (Klien? Gateway? ISP?). Gunakan **ping** dan **traceroute**.</li>
+        <li>**Monitor (Pantau):** Gunakan tools monitoring (CPU, RAM, Bandwidth, Log) untuk melihat apa yang terjadi pada Gateway saat masalah sedang berlangsung.</li>
+        <li>**Action (Ambil Tindakan):** Lakukan perubahan berdasarkan temuan diagnostik.</li>
+        <li>**Test (Uji Coba):** Pastikan perbaikan berhasil dan tidak menciptakan masalah baru.</li>
+    </ol>
+
+</div>
+
+<script>
+    // --- JavaScript untuk Simulasi NAT (Bagian 2) ---
+
+    const narration = document.getElementById('narration');
+    const startButton = document.getElementById('startButton');
+    const flowDiagram = document.getElementById('flow-diagram');
+
+    const ipClientPrivate = '192.168.1.100';
+    const ipGatewayPublic = '203.0.113.5';
+    const ipDestination = '8.8.8.8';
+
+    async function startSimulation() {
+        startButton.disabled = true;
+        startButton.textContent = 'SIMULASI BERLANGSUNG... (Tunggu Sebentar)';
+        narration.textContent = 'Memulai proses koneksi...';
+
+        const clientRect = document.getElementById('client-node').getBoundingClientRect();
+        const gatewayRect = document.getElementById('gateway-node').getBoundingClientRect();
+        const internetRect = document.getElementById('internet-node').getBoundingClientRect();
+        const flowRect = flowDiagram.getBoundingClientRect();
+
+        const relativeX = (rect) => rect.left + rect.width / 2 - flowRect.left;
+        const relativeY = (rect) => rect.top + rect.height / 2 - flowRect.top;
+
+        const pX = relativeX(clientRect);
+        const pY = relativeY(clientRect);
+        const gX = relativeX(gatewayRect);
+        const gY = relativeY(gatewayRect);
+        const iX = relativeX(internetRect);
+        const iY = relativeY(internetRect);
+
+        const packetOut = createPacket(ipClientPrivate, ipDestination, 'Request');
+        flowDiagram.appendChild(packetOut);
+
+        await animatePacket(packetOut, pX, pY, gX, gY, 1500);
+        narration.innerHTML = `**[STEP 1: KLIEN MENGIRIM]** Source: ${ipClientPrivate} (Private) → Dest: ${ipDestination} (Public).`;
+        
+        await delay(1000);
+
+        narration.innerHTML = `**[STEP 2: FIREWALL & NAT]** Gateway menerima. Sekretaris NAT mengubah IP Sumber menjadi IP Publik.`;
+        packetOut.style.backgroundColor = '#f59e0b';
+        packetOut.textContent = ipGatewayPublic.split('.')[3];
+        document.getElementById('gateway-node').style.boxShadow = '0 0 15px #f59e0b';
+        
+        await delay(1500);
+
+        narration.innerHTML = `**[STEP 3: KE INTERNET]** Paket dikirim. Source: ${ipGatewayPublic} (Public) → Dest: ${ipDestination} (Public).`;
+        await animatePacket(packetOut, gX, gY, iX, iY, 2000);
+        document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        
+        await delay(1000);
+        
+        narration.innerHTML = `**[STEP 4: BALASAN SERVER]** Server tujuan merespon balik ke IP Publik Gateway.`;
+        packetOut.style.backgroundColor = '#3b82f6';
+        packetOut.textContent = 'Response';
+        
+        await animatePacket(packetOut, iX, iY, gX, gY, 2000);
+
+        narration.innerHTML = `**[STEP 5: DE-NAT]** Gateway melihat Tabel NAT. IP Tujuan diubah kembali ke IP Privat Klien.`;
+        packetOut.style.backgroundColor = '#10b981';
+        packetOut.textContent = ipClientPrivate.split('.')[3];
+        document.getElementById('gateway-node').style.boxShadow = '0 0 15px #10b981';
+
+        await delay(1500);
+
+        narration.innerHTML = `**[STEP 6: SUKSES]** Balasan dikirim ke PC Klien. Koneksi berhasil!`;
+        await animatePacket(packetOut, gX, gY, pX, pY, 1500);
+        document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+
+        packetOut.remove();
+        narration.textContent = 'Simulasi selesai. Tekan tombol lagi untuk mengulang.';
+        startButton.disabled = false;
+        startButton.textContent = 'ULANGI SIMULASI KONEKSI';
+    }
+
+    function createPacket(sourceIp, destIp, label) {
+        const packet = document.createElement('div');
+        packet.className = 'packet';
+        packet.textContent = sourceIp.split('.')[3];
+        packet.setAttribute('data-source-ip', sourceIp);
+        packet.setAttribute('data-dest-ip', destIp);
+        packet.setAttribute('data-label', label);
+        return packet;
+    }
+
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function animatePacket(element, startX, startY, endX, endY, duration) {
+        // Set initial position
+        element.style.left = `${startX - element.offsetWidth / 2}px`;
+        element.style.top = `${startY - element.offsetHeight / 2}px`;
+        element.style.transitionDuration = `${duration}ms`;
+
+        await delay(50);
+        
+        // Set final position to start the animation
+        element.style.left = `${endX - element.offsetWidth / 2}px`;
+        element.style.top = `${endY - element.offsetHeight / 2}px`;
+        
+        return delay(duration);
+    }
+
+    startButton.addEventListener('click', startSimulation);
+
+    // Initial positioning setup
+    window.addEventListener('load', () => {
+        startSimulation().then(() => {
+            if (flowDiagram.children.length > 3) {
+                flowDiagram.lastChild.remove(); 
+            }
+            narration.textContent = 'Tekan tombol di bawah untuk memulai simulasi permintaan browsing ke Internet.';
+            startButton.disabled = false;
+            startButton.textContent = 'MULAI SIMULASI KONEKSI';
+            document.getElementById('gateway-node').style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
+        });
+    });
+
+
+    // --- JavaScript untuk 20 Studi Kasus Interaktif (Bagian 4) ---
+
+    const studyCasesData = [
+        // KELOMPOK 1: KINERJA & KUALITAS (QoS/BANDWIDTH)
+        {
+            id: 1, title: "1. Streaming Macet (Bandwidth)", color: 'red',
+            description: "Streaming video pembelajaran dari YouTube macet setiap jam 10 pagi, padahal browsing ringan normal.",
+            options: [
+                { text: "Periksa Live Bandwidth Monitoring dan Rule QoS/Simple Queue", isCorrect: true, feedback: "Tepat! Masalah terjadi pada waktu puncak, ini mengarah pada kehabisan bandwidth yang dikelola oleh QoS." },
+                { text: "Cek konfigurasi IP Address LAN", isCorrect: false, feedback: "Salah. Koneksi ke Gateway normal, sehingga IP LAN tidak bermasalah." },
+                { text: "Lakukan ping ke website yang macet (YouTube)", isCorrect: false, feedback: "Salah. Ping hanya menguji koneksi dasar (ICMP), bukan *throughput* data besar (video streaming)." }
+            ]
+        },
+        {
+            id: 2, title: "2. Latensi Tiba-tiba Tinggi (ISP)", color: 'red',
+            description: "Ping ke Gateway cepat (<1ms), tetapi ping ke Google (8.8.8.8) tiba-tiba naik dari 10ms menjadi >500ms.",
+            options: [
+                { text: "Hubungi ISP dan laporkan latensi tinggi pada jalur WAN", isCorrect: true, feedback: "Tepat! Latensi buruk setelah melewati Gateway (ke Internet) berarti masalah ada di link ISP Anda." },
+                { text: "Hapus semua rule Firewall NAT Masquerade", isCorrect: false, feedback: "Salah. NAT tidak mempengaruhi latensi sebesar itu, dan menghapusnya akan mematikan koneksi total." },
+                { text: "Upgrade RAM pada perangkat Gateway", isCorrect: false, feedback: "Salah. Jika beban CPU/RAM normal, upgrade hardware tidak akan memperbaiki latensi ISP." }
+            ]
+        },
+        {
+            id: 3, title: "3. Koneksi VPN Lambat", color: 'red',
+            description: "Saat mengakses kantor via VPN (Virtual Private Network), kecepatan transfer sangat lambat, namun browsing biasa cepat.",
+            options: [
+                { text: "Cek Rule QoS/Mangle untuk melihat apakah trafik VPN dibatasi (di-limit)", isCorrect: true, feedback: "Tepat! Trafik VPN seringkali tidak dikenali dengan baik oleh QoS default dan mungkin tidak diberi prioritas yang sesuai." },
+                { text: "Periksa power supply router", isCorrect: false, feedback: "Salah. Jika hanya VPN yang lambat, masalahnya bukan pada daya atau hardware umum." },
+                { text: "Ganti semua kabel LAN di jaringan", isCorrect: false, feedback: "Salah. Hanya trafik VPN yang lambat, ini bukan masalah fisik di LAN." }
+            ]
+        },
+        {
+            id: 4, title: "4. Download Cepat, Upload Lambat", color: 'red',
+            description: "Kecepatan *download* mencapai batas maksimal 50Mbps, tetapi *upload* hanya 1Mbps, padahal paket ISP 50:50.",
+            options: [
+                { text: "Periksa kembali konfigurasi Rate Limit (Simple Queue) untuk memastikan limit Upload sudah benar", isCorrect: true, feedback: "Tepat! Konfigurasi QoS/Limit bandwidth sering kali salah setting pada porsi *upload* (Queue Target Upload)." },
+                { text: "Hapus semua rule Firewall Filter", isCorrect: false, feedback: "Salah. Firewall tidak membatasi kecepatan, hanya memblokir." },
+                { text: "Cek Default Route di Routing Table", isCorrect: false, feedback: "Salah. Routing sudah benar karena *download* berjalan normal." }
+            ]
+        },
+        {
+            id: 5, title: "5. QoS Tidak Berfungsi", color: 'red',
+            description: "Sudah membuat Simple Queue untuk membatasi 192.168.1.100, tetapi klien tersebut tetap bisa *download* tanpa batas.",
+            options: [
+                { text: "Pastikan rule Simple Queue Anda berada di urutan paling atas (prioritas tertinggi)", isCorrect: true, feedback: "Tepat! Pada perangkat seperti Mikrotik, Simple Queue dibaca dari atas ke bawah. Rule yang spesifik harus di atas." },
+                { text: "Ganti IP Address Gateway di DHCP Server", isCorrect: false, feedback: "Salah. Mengubah IP Gateway tidak akan memengaruhi berjalannya Queue yang sudah dibuat." },
+                { text: "Restart seluruh Access Point di jaringan", isCorrect: false, feedback: "Salah. QoS diimplementasikan di Gateway, bukan di Access Point." }
+            ]
+        },
+
+        // KELOMPOK 2: KONEKTIVITAS & SERVIS (DNS/DHCP/NAT)
+        {
+            id: 6, title: "6. Klien Tak Dapat IP (DHCP)", color: 'blue',
+            description: "Laptop baru terhubung ke jaringan, tetapi menampilkan error 'Limited Access' dan gagal mendapatkan IP Address (DHCP Timeout).",
+            options: [
+                { text: "Periksa range DHCP Pool di Gateway, kemungkinan pool sudah habis/penuh", isCorrect: true, feedback: "Tepat! Jika klien gagal dapat IP, Pool DHCP adalah penyebab utama. Mungkin perlu diperbesar atau *lease* lama dihapus." },
+                { text: "Periksa rule Firewall NAT Masquerade", isCorrect: false, feedback: "Salah. NAT hanya bekerja setelah klien mendapatkan IP dan mencoba ke Internet." },
+                { text: "Cek MTU/MSS Clamping", isCorrect: false, feedback: "Salah. Ini masalah layer 2/3 (DHCP), tidak ada hubungannya dengan MTU." }
+            ]
+        },
+        {
+            id: 7, title: "7. Browsing Gagal, Ping Berhasil (DNS)", color: 'blue',
+            description: "Klien dapat IP Address, ping ke IP 8.8.8.8 berhasil, tetapi gagal membuka situs web dengan nama domain.",
+            options: [
+                { text: "Periksa konfigurasi DNS Server pada Gateway dan pastikan klien menerima DNS yang valid", isCorrect: true, feedback: "Tepat! Ping IP berhasil + browsing gagal = masalah resolusi nama domain (DNS)." },
+                { text: "Hapus semua rule NAT Masquerade", isCorrect: false, feedback: "Salah. NAT sudah bekerja karena ping ke IP publik berhasil." },
+                { text: "Ganti kabel dari Gateway ke Switch LAN", isCorrect: false, feedback: "Salah. Masalah fisik akan menyebabkan ping juga gagal." }
+            ]
+        },
+        {
+            id: 8, title: "8. Gagal Akses Aplikasi Aman (MTU)", color: 'blue',
+            description: "Semua situs biasa normal, tetapi login ke portal bank (HTTPS) gagal di tengah jalan (*page load error*).",
+            options: [
+                { text: "Cek MTU/MSS Clamping pada Firewall Mangle (Interface WAN)", isCorrect: true, feedback: "Tepat! Koneksi aman sering menggunakan paket besar. Kegagalan di tengah jalan menunjukkan fragmentasi yang salah atau MTU/MSS yang tidak tepat." },
+                { text: "Ubah IP Address DHCP Server", isCorrect: false, feedback: "Salah. Tidak ada hubungan antara IP DHCP dan koneksi aman HTTPS." },
+                { text: "Cek Firewall Filter Rule untuk HTTP Port 80", isCorrect: false, feedback: "Salah. Ini adalah masalah HTTPS (Port 443), bukan HTTP." }
+            ]
+        },
+        {
+            id: 9, title: "9. Server Internal Tak Terakses (Loopback)", color: 'blue',
+            description: "Server Internal (Web Server) bisa diakses dari luar jaringan menggunakan IP Publik, tapi tidak bisa diakses menggunakan IP Publik yang sama dari dalam LAN.",
+            options: [
+                { text: "Konfigurasi NAT Hairpin/NAT Loopback pada Firewall (Chain dst-nat)", isCorrect: true, feedback: "Tepat! Klien LAN perlu bantuan NAT Loopback agar Gateway mengizinkan mereka mengakses IP Publik Gateway itu sendiri." },
+                { text: "Hapus rule Firewall Filter yang memblokir IP Klien", isCorrect: false, feedback: "Salah. Klien bisa ke internet, jadi tidak terblokir." },
+                { text: "Pindahkan Server ke subnet lain", isCorrect: false, feedback: "Salah. Solusi ini terlalu drastis; masalah bisa diselesaikan di NAT." }
+            ]
+        },
+        {
+            id: 10, title: "10. Port Aplikasi Diblokir (Dst-NAT)", color: 'blue',
+            description: "Aplikasi khusus kantor (Port 8080) tidak bisa diakses dari luar/internet, padahal server menyala.",
+            options: [
+                { text: "Cek Firewall NAT Rule (dst-nat) untuk port 8080 sudah dibuat dan benar", isCorrect: true, feedback: "Tepat! Untuk mengarahkan trafik dari luar ke server internal, harus ada rule Destination NAT (*dst-nat*) yang spesifik." },
+                { text: "Periksa kabel LAN yang terhubung ke Server", isCorrect: false, feedback: "Salah. Jika server menyala, koneksi LAN normal, tapi akses dari luar yang bermasalah." },
+                { text: "Ubah IP Address Server menjadi IP Public", isCorrect: false, feedback: "Salah. Server Internal harus tetap menggunakan IP Privat." }
+            ]
+        },
+
+        // KELOMPOK 3: ROUTING & INFRASTRUKTUR
+        {
+            id: 11, title: "11. Hilang Default Route (Routing)", color: 'green',
+            description: "Seluruh klien LAN tidak bisa mengakses internet (ping ke semua IP luar gagal), padahal status link WAN 'Connected'.",
+            options: [
+                { text: "Cek apakah Default Route (0.0.0.0/0) sudah hilang dari Routing Table", isCorrect: true, feedback: "Tepat! Default Route adalah jalan keluar utama. Jika hilang, Gateway tidak tahu harus mengirim paket ke mana." },
+                { text: "Lakukan *reset configuration* Gateway", isCorrect: false, feedback: "Salah. Ini terlalu ekstrem, cek routing dulu." },
+                { text: "Periksa konfigurasi DHCP Server", isCorrect: false, feedback: "Salah. Klien sudah dapat IP, jadi DHCP sudah benar." }
+            ]
+        },
+        {
+            id: 12, title: "12. Akses Subnet Lain Gagal (Static Route)", color: 'green',
+            description: "Klien di LAN (192.168.1.0/24) tidak bisa mengakses Server di subnet 172.16.0.0/24, tapi bisa ke internet.",
+            options: [
+                { text: "Cek Routing Table untuk Route Static ke subnet 172.16.0.0/24", isCorrect: true, feedback: "Tepat! Untuk mencapai subnet lain yang bukan lokal, Gateway harus memiliki Route Static yang menunjuk ke *next-hop* (router selanjutnya)." },
+                { text: "Ganti kabel UTP menjadi Fiber Optic", isCorrect: false, feedback: "Salah. Ini masalah layer 3 (Routing), bukan layer 1 (Kabel)." },
+                { text: "Cek DNS Forwarder", isCorrect: false, feedback: "Salah. Ini masalah akses IP, bukan nama domain." }
+            ]
+        },
+        {
+            id: 13, title: "13. Load Balance Mati Total", color: 'green',
+            description: "Menggunakan 2 ISP (Load Balance), tiba-tiba satu ISP down dan seluruh jaringan ikut mati, padahal ISP satunya masih hidup.",
+            options: [
+                { text: "Periksa fungsi Check Gateway (Netwatch/Ping Check) pada routing ISP yang down", isCorrect: true, feedback: "Tepat! Jika *failover* tidak terjadi, berarti Gateway masih mengira ISP yang down itu 'hidup' karena tidak ada *monitoring* aktif (Netwatch)." },
+                { text: "Nonaktifkan NAT Masquerade", isCorrect: false, feedback: "Salah. NAT Masquerade harus tetap aktif untuk kedua ISP." },
+                { text: "Tambahkan VLAN di semua Switch", isCorrect: false, feedback: "Salah. VLAN adalah masalah layer 2, ini adalah masalah routing layer 3." }
+            ]
+        },
+        {
+            id: 14, title: "14. Loop Jaringan LAN", color: 'green',
+            description: "Jaringan LAN sering *crash*, lampu indikator semua port di switch berkedip sangat cepat, dan koneksi sangat lambat.",
+            options: [
+                { text: "Matikan salah satu kabel yang terpasang berulang (Loop) atau aktifkan Spanning Tree Protocol (STP)", isCorrect: true, feedback: "Tepat! Gejala ini adalah ciri khas dari *Bridge Loop* atau *Switch Loop* yang membanjiri jaringan dengan *broadcast*." },
+                { text: "Ganti firewall filter rule ke chain output", isCorrect: false, feedback: "Salah. Loop adalah masalah fisik/layer 2, bukan firewall." },
+                { text: "Ganti DNS Server menjadi IP Gateway", isCorrect: false, feedback: "Salah. Tidak ada hubungan antara DNS dan loop fisik." }
+            ]
+        },
+        {
+            id: 15, title: "15. Akses Wi-Fi Lambat", color: 'green',
+            description: "Klien Wi-Fi sangat lambat saat browsing, padahal koneksi kabel dari Gateway ke AP normal dan kabel lainnya lancar.",
+            options: [
+                { text: "Periksa konfigurasi Channel (frekuensi), dan interferensi Wi-Fi pada Access Point", isCorrect: true, feedback: "Tepat! Jika hanya Wi-Fi yang lambat, masalahnya pasti di pita frekuensi (channel bertabrakan/interferensi) atau masalah sinyal." },
+                { text: "Cek NAT Masquerade Rule", isCorrect: false, feedback: "Salah. Klien kabel normal, berarti NAT sudah benar." },
+                { text: "Ganti seluruh IP Address di LAN", isCorrect: false, feedback: "Salah. Mengubah IP tidak akan memperbaiki kualitas sinyal Wi-Fi." }
+            ]
+        },
+        
+        // KELOMPOK 4: HARDWARE, KEAMANAN & SISTEM
+        {
+            id: 16, title: "16. Resource Overload Acak", color: 'purple',
+            description: "Gateway router sering *hang* dan *restart* sendiri secara acak. CPU Usage melonjak ke 100% sebelum *restart*.",
+            options: [
+                { text: "Cek System Monitor untuk melihat proses mana yang memakan CPU/RAM tertinggi dan cek log sistem", isCorrect: true, feedback: "Tepat! Identifikasi sumber beban (misal: proses logging berlebihan, virus, atau serangan DoS) adalah langkah pertama." },
+                { text: "Lakukan *upgrade* Firmware Gateway", isCorrect: false, feedback: "Salah. Lakukan diagnosis beban dulu. *Upgrade* hanya dilakukan jika ada *bug* yang diketahui." },
+                { text: "Periksa kabel power supply", isCorrect: false, feedback: "Salah. *Hang* dan 100% CPU lebih cenderung masalah software/beban, bukan daya." }
+            ]
+        },
+        {
+            id: 17, title: "17. Gagal Akses Sertifikat (Waktu)", color: 'purple',
+            description: "Klien gagal mengakses situs HTTPS tertentu dan muncul error 'Certificate Invalid' atau 'Time Mismatch'.",
+            options: [
+                { text: "Cek konfigurasi NTP/Timezone pada Gateway, pastikan waktu sistem sinkron dengan benar", isCorrect: true, feedback: "Tepat! Sertifikat HTTPS sangat sensitif terhadap waktu. Jika waktu Gateway salah, validasi sertifikat akan gagal." },
+                { text: "Hapus cache browser klien", isCorrect: false, feedback: "Salah. Ini masalah validasi sertifikat yang berasal dari Gateway/Server." },
+                { text: "Blokir semua port kecuali Port 80 dan 443", isCorrect: false, feedback: "Salah. Ini tindakan keamanan, bukan perbaikan waktu." }
+            ]
+        },
+        {
+            id: 18, title: "18. MAC Address Baru Terblokir (Security)", color: 'purple',
+            description: "Laptop baru terhubung dan dapat IP, tapi tidak bisa akses internet. Semua laptop lama normal.",
+            options: [
+                { text: "Periksa fitur keamanan MAC Filtering/Allow List yang membatasi MAC Address baru", isCorrect: true, feedback: "Tepat! Jika hanya perangkat baru yang gagal, kemungkinan ada *security policy* (MAC Whitelist) yang belum mendaftarkan perangkat tersebut." },
+                { text: "Hapus rule QoS", isCorrect: false, feedback: "Salah. QoS tidak memblokir, hanya membatasi kecepatan." },
+                { text: "Restart Gateway", isCorrect: false, feedback: "Salah. Masalah akan muncul lagi karena *security policy* masih aktif." }
+            ]
+        },
+        {
+            id: 19, title: "19. Log System Penuh (Overload)", color: 'purple',
+            description: "Router Gateway terasa lambat diakses, dan Log System penuh dengan pesan 'connection refused' setiap detik.",
+            options: [
+                { text: "Matikan logging debug yang tidak perlu atau simpan log ke server eksternal (Syslog)", isCorrect: true, feedback: "Tepat! Logging yang terlalu detail dapat membebani CPU dan RAM, memperlambat performa router." },
+                { text: "Ganti Password Administrator Router", isCorrect: false, feedback: "Salah. Ini masalah performa log, bukan autentikasi." },
+                { text: "Cek IP Public di ISP", isCorrect: false, feedback: "Salah. Masalah ada pada sistem internal router." }
+            ]
+        },
+        {
+            id: 20, title: "20. Blokir Ping (Keamanan)", color: 'purple',
+            description: "Browsing ke website normal, tetapi saat mencoba ping ke IP Public Gateway Anda, hasilnya selalu 'Request Timed Out'.",
+            options: [
+                { text: "Periksa Firewall Filter Rule (Chain input) yang memblokir ICMP (Ping)", isCorrect: true, feedback: "Tepat! Router sering dikonfigurasi untuk memblokir ping ke IP Publiknya untuk tujuan keamanan (mengurangi *exposure*)." },
+                { text: "Tambahkan IP DNS di DHCP Server", isCorrect: false, feedback: "Salah. Browsing normal, jadi DNS sudah benar." },
+                { text: "Reset seluruh konfigurasi NAT", isCorrect: false, feedback: "Salah. NAT hanya bekerja untuk koneksi dari dalam ke luar." }
+            ]
+        },
+    ];
+
+    const studyCasesContainer = document.getElementById('study-cases');
+
+    // Function to render the interactive cases
+    function renderStudyCases() {
+        studyCasesContainer.innerHTML = ''; 
+
+        studyCasesData.forEach(caseData => {
+            const card = document.createElement('div');
+            // Determine Tailwind background and text colors based on case color
+            let bgClass = '';
+            let borderClass = '';
+            let titleClass = '';
+
+            // Grouping by color for visual consistency
+            if (caseData.id <= 5) {
+                bgClass = 'bg-red-50'; borderClass = 'border-red-300'; titleClass = 'text-red-700'; 
+            } else if (caseData.id <= 10) {
+                bgClass = 'bg-blue-50'; borderClass = 'border-blue-300'; titleClass = 'text-blue-700';
+            } else if (caseData.id <= 15) {
+                bgClass = 'bg-green-50'; borderClass = 'border-green-300'; titleClass = 'text-green-700';
+            } else {
+                bgClass = 'bg-purple-50'; borderClass = 'border-purple-300'; titleClass = 'text-purple-700';
+            }
+
+
+            card.className = `case-card ${bgClass} border ${borderClass} p-4`;
+            card.innerHTML = `
+                <h4 class="font-bold text-lg ${titleClass} mb-2">${caseData.title}</h4>
+                <p class="text-sm case-description mb-3">${caseData.description}</p>
+                <p class="font-bold text-gray-700 text-sm mb-2">Pilih Tindakan Diagnosis Terbaik:</p>
+                <div class="options-container flex flex-col space-y-2 mb-3" id="options-${caseData.id}">
+                    ${caseData.options.map((option, index) => `
+                        <button 
+                            class="option-button w-full text-left py-2 px-3 bg-yellow-100 text-gray-800 rounded-lg shadow-sm text-xs font-medium"
+                            data-case-id="${caseData.id}"
+                            data-correct="${option.isCorrect}"
+                            data-feedback="${option.feedback}"
+                            data-option-index="${index}"
+                        >
+                            ${option.text}
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-container mt-auto" id="feedback-${caseData.id}">
+                    <!-- Feedback will appear here -->
+                </div>
+            `;
+            studyCasesContainer.appendChild(card);
+        });
+
+        // Attach event listeners after rendering
+        document.querySelectorAll('.option-button').forEach(button => {
+            button.addEventListener('click', handleCaseSelection);
+        });
+    }
+
+    // Function to handle the selection logic
+    function handleCaseSelection(event) {
+        const button = event.target;
+        const caseId = button.getAttribute('data-case-id');
+        const isCorrect = button.getAttribute('data-correct') === 'true';
+        const feedbackText = button.getAttribute('data-feedback');
+        const optionsContainer = document.getElementById(`options-${caseId}`);
+        const feedbackContainer = document.getElementById(`feedback-${caseId}`);
+        
+        // Disable all buttons after one choice
+        optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+            btn.disabled = true;
+            btn.style.backgroundColor = '#fef3c7'; // Light yellow background
+            btn.style.boxShadow = 'none';
+        });
+
+        // Apply feedback based on correctness
+        if (isCorrect) {
+            button.style.backgroundColor = '#10b981'; // Green-500
+            button.style.color = 'white';
+            feedbackContainer.innerHTML = `<div class="feedback-box success">✔️ Jawaban Benar! ${feedbackText}</div>`;
+        } else {
+            button.style.backgroundColor = '#ef4444'; // Red-500
+            button.style.color = 'white';
+            feedbackContainer.innerHTML = `<div class="feedback-box error">❌ Jawaban Salah. ${feedbackText}</div>`;
+
+            // Highlight the correct answer
+            optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                if (btn.getAttribute('data-correct') === 'true') {
+                    btn.style.border = '2px solid #10b981'; 
+                    btn.style.backgroundColor = '#d1fae5'; 
+                    btn.style.color = '#065f46';
+                }
+            });
+        }
+    }
+
+    // Render the study cases when the window loads
+    window.addEventListener('load', renderStudyCases);
+
+</script>
+</body>
+</html>
