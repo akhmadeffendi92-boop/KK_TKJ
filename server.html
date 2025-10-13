@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Pembelajaran Server Debian TKJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Learning -->
+    <!-- Application Structure Plan: The application transforms the simple list of topics from the report into an interactive "Learning Center". The structure is a two-column layout: a sidebar acts as a navigable syllabus, and a main content area displays a detailed summary, key concepts, and a direct link for the selected topic. This design was chosen to provide context and structure to the learning process, making it more engaging than a simple link list. Users can explore topics non-linearly and track their progress via status selectors, enhancing usability and personal investment. -->
+    <!-- Visualization & Content Choices: Report's list of topics is transformed into an interactive syllabus (HTML/JS) to organize content. The goal is to provide a clear learning path. Each topic's URL is presented as a primary call-to-action button for clear information access. To add value, each topic includes a summary and key concepts (structured HTML) to inform the user before they commit to the full tutorial. A novel interaction, a progress tracker (JS-controlled dropdown), allows users to organize their personal learning journey. No quantitative charts are needed as the source is textual. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar-item.active {
+            background-color: #e9ecef;
+            color: #111827;
+            border-right: 4px solid #4f46e5;
+        }
+        .sidebar-item:not(.active):hover {
+            background-color: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #a5b4fc;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e0e7ff;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div id="app" class="max-w-7xl mx-auto min-h-screen flex flex-col">
+        <header class="bg-white border-b border-gray-200 p-4 sm:p-6 shadow-sm">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-indigo-600">Pusat Pembelajaran Server Debian</h1>
+                    <p class="text-sm sm:text-base text-gray-500 mt-1">8 Langkah Konfigurasi Server Inti untuk Siswa TKJ</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow flex flex-col md:flex-row bg-white">
+            <nav id="sidebar" class="w-full md:w-1/3 lg:w-1/4 border-r border-gray-200 bg-gray-50 p-4 flex-shrink-0">
+                <h2 class="text-lg font-semibold mb-4 text-gray-700">Silabus Konfigurasi Server</h2>
+                <ul id="topic-list" class="space-y-2">
+                </ul>
+            </nav>
+
+            <section id="content-viewer" class="flex-grow p-6 md:p-8 lg:p-10 custom-scrollbar overflow-y-auto">
+                <div id="welcome-message">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Selamat Datang di Modul Server Debian!</h2>
+                    <p class="text-lg text-gray-600 mb-6">Aplikasi ini menyajikan ringkasan **8 konfigurasi server esensial** yang harus dikuasai oleh siswa TKJ. Desain ini memungkinkan Anda belajar secara terstruktur dan melacak kemajuan Anda pada setiap topik.</p>
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg">
+                        <h3 class="font-semibold text-indigo-800">Fokus Pembelajaran</h3>
+                        <p class="text-indigo-700 mt-2 text-sm">Setiap materi tidak hanya mencakup langkah-langkah teknis, tetapi juga **Fungsi, Manfaat, Kelebihan, dan Kekurangan** layanan tersebut, memberikan pemahaman yang komprehensif. Gunakan *progress tracker* di kanan atas untuk menandai status belajar Anda.</p>
+                    </div>
+                </div>
+                <div id="topic-content" class="hidden">
+                    <div class="flex justify-between items-start mb-6">
+                        <h2 id="topic-title" class="text-3xl font-bold text-gray-800 w-3/4"></h2>
+                        <div class="w-1/4 flex flex-col items-end">
+                            <label for="learning-status" class="text-xs font-medium text-gray-500 mb-1">Status Belajar:</label>
+                            <select id="learning-status" class="text-xs p-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 w-full max-w-[150px]">
+                                <option value="not-started">Belum Mulai</option>
+                                <option value="in-progress">Sedang Dipelajari</option>
+                                <option value="completed">Selesai</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ELEMEN GAMBAR BARU -->
+                    <img id="topic-image" class="w-full h-auto max-h-72 object-cover rounded-lg shadow-lg mb-8" alt="Visualisasi Materi" onerror="this.onerror=null; this.src='https://placehold.co/600x300/ccc/fff?text=Visual+Tidak+Tersedia';">
+                    <!-- END ELEMEN GAMBAR BARU -->
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-semibold border-b-2 border-indigo-200 pb-2 mb-4 text-indigo-700">Pengantar Materi (Fungsi, Manfaat, Kelebihan & Kekurangan)</h3>
+                            <p id="topic-summary" class="text-gray-600 leading-relaxed"></p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-semibold border-b-2 border-indigo-200 pb-2 mb-4 text-indigo-700">Konsep Kunci & Prasyarat</h3>
+                            <ul id="topic-key-concepts" class="list-disc list-inside space-y-2 text-gray-600">
+                            </ul>
+                        </div>
+                        
+                        <div class="text-center pt-4">
+                            <a id="topic-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                                Buka Tutorial Lengkap &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const topicsData = [
+                {
+                    id: 'debian-install',
+                    title: '1. Instalasi Debian 10',
+                    url: 'https://naffaza.blogspot.com/2020/09/tutorial-instal-debian-10-di-virtualbox.html',
+                    imageUrl: 'https://placehold.co/600x300/e0e7ff/4f46e5?text=Instalasi+OS+Debian+10',
+                    summary: 'Fungsi utama dari materi ini adalah menyiapkan **basis sistem operasi Linux Debian 10** yang stabil dan minimalis, baik di perangkat keras fisik maupun mesin virtual (VirtualBox). **Manfaat**nya adalah menyediakan platform open-source yang andal, aman, dan ringan, menjadi fondasi krusial sebelum mengkonfigurasi layanan server apapun. **Kelebihan:** Debian dikenal karena **kestabilannya** yang luar biasa, **keamanan** yang tinggi (minim bloatware), dan didukung oleh komunitas serta repositori perangkat lunak yang sangat luas. **Kekurangan:** Proses instalasi awal cenderung **lebih teknis** dan membutuhkan pemahaman Command Line Interface (CLI) yang mungkin menantang bagi pemula.',
+                    keyConcepts: [
+                        'Mesin Virtual (VM) dan Snapshot',
+                        'Partisi Dasar (/, /home, swap)',
+                        'Mode Instalasi CLI',
+                        'Konfigurasi Awal Pengguna dan Jaringan'
+                    ]
+                },
+                {
+                    id: 'network-config',
+                    title: '2. Konfigurasi Jaringan Dasar',
+                    url: '#', // Tautan belum tersedia
+                    imageUrl: 'https://placehold.co/600x300/f0f9ff/0077b6?text=Konfigurasi+Jaringan+Debian',
+                    summary: 'Konfigurasi ini memiliki **Fungsi** esensial untuk memberikan identitas jaringan yang **permanen dan stabil (IP Statis)** kepada server melalui file `/etc/network/interfaces`. **Manfaat** utamanya adalah menjamin bahwa server selalu berada pada alamat yang sama, krusial bagi layanan yang membutuhkan akses tetap (seperti DNS atau Web Server). **Kelebihan:** Tingkat **stabilitas yang sangat tinggi**, memungkinkan **kontrol penuh** oleh administrator atas setiap parameter jaringan. **Kekurangan:** Setiap perubahan pada skema IP memerlukan konfigurasi ulang **manual**, dan konfigurasi ini sangat rentan terhadap **kesalahan pengetikan** (mis. salah Netmask atau Gateway).',
+                    keyConcepts: [
+                        'IP Statis, Netmask, Gateway',
+                        '/etc/network/interfaces (konfigurasi utama)',
+                        '/etc/hosts (resolusi lokal)',
+                        '/etc/resolv.conf (konfigurasi DNS client)'
+                    ]
+                },
+                {
+                    id: 'dhcp-server',
+                    title: '3. Konfigurasi DHCP Server (ISC-DHCP-Server)',
+                    url: 'https://naffaza.blogspot.com/search?q=dhcp+debian+10', // Tautan baru
+                    imageUrl: 'https://placehold.co/600x300/fff7ed/f97316?text=DHCP+Server+Otomatisasi+IP',
+                    summary: 'DHCP Server **berfungsi** untuk mengelola dan mendistribusikan IP Address, Netmask, Gateway, dan DNS secara **otomatis** kepada semua perangkat klien yang terhubung ke jaringan. **Manfaat** utamanya adalah mengotomatisasi proses konfigurasi, yang sangat **menghemat waktu administrasi** dan secara efektif **menghilangkan konflik IP**. **Kelebihan:** Menyediakan **efisiensi manajemen** tinggi dan mendukung **skalabilitas** jaringan yang cepat. **Kekurangan:** Klien menjadi sangat **bergantung** pada ketersediaan server DHCP. Kegagalan pada server dapat melumpuhkan komunikasi klien baru. Selain itu, ada sedikit peningkatan *broadcast traffic* jaringan.',
+                    keyConcepts: [
+                        'DORA Process (Discover, Offer, Request, Acknowledge)',
+                        'Deklarasi Subnet dan Range IP',
+                        'Lease Time (Waktu Sewa IP)',
+                        'Konfigurasi /etc/dhcp/dhcpd.conf'
+                    ]
+                },
+                {
+                    id: 'dns-server',
+                    title: '4. Konfigurasi DNS Server (Bind9)',
+                    url: 'https://naffaza.blogspot.com/search?q=dns+debian+10', // Tautan baru
+                    imageUrl: 'https://placehold.co/600x300/f0fdfa/0d9488?text=DNS+Server+Domain+Name',
+                    summary: 'DNS Server (menggunakan Bind9) **berfungsi** sebagai \'buku telepon\' internet, yakni menerjemahkan nama domain (contoh: *sekolah.sch.id*) menjadi IP Address numerik dan sebaliknya (Reverse Zone). **Manfaat**nya adalah **memungkinkan pengguna untuk mengakses semua layanan server dengan nama yang mudah diingat**, bukan angka, meningkatkan aksesibilitas. **Kelebihan:** Akses layanan menjadi sangat mudah dan **universal**, serta wajib untuk integrasi layanan berbasis internet. **Kekurangan:** Konfigurasi Bind9 cukup **rumit**, membutuhkan kehati-hatian dalam penulisan file *Zone*, dan sangat **sensitif terhadap kesalahan sintaks** yang dapat menyebabkan resolusi nama gagal.',
+                    keyConcepts: [
+                        'Zone Forward (A, CNAME)',
+                        'Zone Reverse (PTR)',
+                        'Bind9 Service dan Tools dnsutils (dig, nslookup)',
+                        'Record DNS (A, CNAME, MX, NS)'
+                    ]
+                },
+                {
+                    id: 'web-server',
+                    title: '5. Konfigurasi Web Server (Apache2)',
+                    url: 'https://naffaza.blogspot.com/2020/10/konfigurasi-web-server-apache-di-debian.html', // Tautan Diperbarui
+                    imageUrl: 'https://placehold.co/600x300/f5f5f4/44403c?text=Apache2+Web+Hosting',
+                    summary: 'Web Server (menggunakan Apache2) **berfungsi** untuk melayani permintaan klien dan mengirimkan konten berbasis web (halaman HTML, gambar, skrip) melalui protokol HTTP dan HTTPS. **Manfaat** utama adalah mampu **menjalankan situs web resmi sekolah**, portal akademik, atau aplikasi web internal TKJ. **Kelebihan:** Apache2 sangat **modular**, **fleksibel**, **handal**, dan memiliki dukungan komunitas yang luas. **Kekurangan:** Membutuhkan **sumber daya memori (RAM) yang cukup besar** dibandingkan server web lain (misal: Nginx). Konfigurasi *Virtual Host* bisa menjadi **kompleks** saat menangani banyak domain.',
+                    keyConcepts: [
+                        'HTTP dan HTTPS (Port 80 dan 443)',
+                        'Virtual Host (hosting banyak domain di satu IP)',
+                        'Tool Links (browser CLI untuk pengujian)',
+                        'Konfigurasi file sites-available/sites-enabled'
+                    ]
+                },
+                {
+                    id: 'file-server',
+                    title: '6. Konfigurasi File Server (Samba)',
+                    url: 'https://naffaza.blogspot.com/search?q=samba+debian+10', // Tautan baru
+                    imageUrl: 'https://placehold.co/600x300/ecfdf5/059669?text=Samba+File+Sharing',
+                    summary: 'File Server (menggunakan Samba) **berfungsi** untuk mengimplementasikan protokol SMB/CIFS di lingkungan Linux, yang memungkinkan **berbagi direktori dan printer secara mulus** dengan komputer klien Windows. **Manfaat**nya adalah **mempermudah kolaborasi** dan pertukaran data tugas antar siswa/guru, serta memaksimalkan penggunaan printer bersama di lab. **Kelebihan:** **Kompatibilitasnya sangat tinggi** dengan semua sistem Windows. Menyediakan **kontrol akses** yang sangat granular (pengaturan izin per pengguna/grup). **Kekurangan:** Kecepatan transfer file kadang sedikit **lebih lambat** dibandingkan protokol Linux native, dan manajemen *permissions* Samba bisa menjadi **rumit** jika tidak dilakukan dengan hati-hati.',
+                    keyConcepts: [
+                        'Protokol SMB/CIFS',
+                        'Shared Directory (Folder Berbagi)',
+                        'User dan Group Access Control',
+                        'Konfigurasi File smb.conf'
+                    ]
+                },
+                {
+                    id: 'mail-server',
+                    title: '7. Konfigurasi Mail Server (Postfix/Dovecot)',
+                    url: 'https://naffaza.blogspot.com/2021/05/tutorial-konfigurasi-mail-server-pada.html', // Materi dan Tautan Baru
+                    imageUrl: 'https://placehold.co/600x300/fef3c7/facc15?text=Mail+Server+SMTP+IMAP',
+                    summary: 'Mail Server **berfungsi** sebagai tulang punggung sistem email, menangani proses pengiriman (**SMTP - Postfix**) dan penerimaan/penyimpanan (**IMAP/POP3 - Dovecot**) email. **Manfaat** utamanya adalah memberikan **layanan email pribadi** dan profesional dalam jaringan sekolah, meningkatkan komunikasi formal. **Kelebihan:** **Kontrol penuh** atas data email, tidak bergantung pada layanan pihak ketiga, dan sangat **aman** (jika dikonfigurasi dengan benar). **Kekurangan:** Konfigurasi sangat **kompleks**, memerlukan pemahaman tentang DNS Record (MX Record), sertifikat keamanan, dan membutuhkan sumber daya server yang cukup besar.',
+                    keyConcepts: [
+                        'SMTP (Simple Mail Transfer Protocol - Postfix)',
+                        'IMAP/POP3 (Dovecot)',
+                        'MX Record di DNS',
+                        'Virtual User dan Domain'
+                    ]
+                },
+                {
+                    id: 'webmail-server',
+                    title: '8. Konfigurasi Web Mail (Roundcube)',
+                    url: 'https://naffaza.blogspot.com/search?q=webmail+debian+10', // Tautan baru
+                    imageUrl: 'https://placehold.co/600x300/fef2f2/ef4444?text=Roundcube+Webmail+Interface',
+                    summary: 'Web Mail (menggunakan Roundcube) **berfungsi** sebagai klien email berbasis web, menyediakan **antarmuka grafis yang ramah pengguna** untuk mengakses dan mengelola kotak masuk yang berada di Mail Server (Postfix/Dovecot). **Manfaat** utamanya adalah **memungkinkan pengguna mengakses email mereka secara universal** hanya melalui browser web, tanpa perlu konfigurasi aplikasi tambahan. **Kelebihan:** **Aksesibilitas tinggi** dari berbagai perangkat, tampilan modern, dan kemudahan penggunaan. **Kekurangan:** Roundcube hanyalah antarmuka klien; ia **membutuhkan** konfigurasi Mail Server (Item 7) dan Database (MySQL/MariaDB) yang sudah berfungsi sebagai **prasyarat utama**, sehingga menambah kompleksitas setup server secara keseluruhan.',
+                    keyConcepts: [
+                        'Klien Web Mail (Roundcube)',
+                        'Koneksi IMAP/POP3',
+                        'SMTP (Sending)',
+                        'Prasyarat: Mail Server dan Database'
+                    ]
+                }
+            ];
+
+            const learningStatus = {};
+            topicsData.forEach(topic => {
+                learningStatus[topic.id] = 'not-started';
+            });
+            
+            const topicListEl = document.getElementById('topic-list');
+            const welcomeMessageEl = document.getElementById('welcome-message');
+            const topicContentEl = document.getElementById('topic-content');
+            const topicTitleEl = document.getElementById('topic-title');
+            const topicSummaryEl = document.getElementById('topic-summary');
+            const topicKeyConceptsEl = document.getElementById('topic-key-concepts');
+            const topicLinkEl = document.getElementById('topic-link');
+            const statusSelectorEl = document.getElementById('learning-status');
+            const topicImageEl = document.getElementById('topic-image');
+
+            let activeTopicId = null;
+
+            function renderTopicList() {
+                topicListEl.innerHTML = '';
+                topicsData.forEach(topic => {
+                    const li = document.createElement('li');
+                    
+                    const status = learningStatus[topic.id];
+                    let statusIcon = '';
+                    if (status === 'completed') {
+                        statusIcon = '<span class="text-green-500" title="Selesai">✔</span>';
+                    } else if (status === 'in-progress') {
+                        statusIcon = '<span class="text-yellow-500" title="Sedang Dipelajari">●</span>';
+                    }
+
+                    li.innerHTML = `
+                        <button data-id="${topic.id}" class="sidebar-item w-full text-left p-3 rounded-md transition-colors duration-200 text-gray-600 font-medium flex justify-between items-center">
+                            <span>${topic.title}</span>
+                            ${statusIcon}
+                        </button>
+                    `;
+                    topicListEl.appendChild(li);
+                });
+                setActiveTopicStyle();
+            }
+
+            function setActiveTopicStyle() {
+                const buttons = topicListEl.querySelectorAll('.sidebar-item');
+                buttons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.id === activeTopicId);
+                });
+            }
+
+            function renderContent(topicId) {
+                const topic = topicsData.find(t => t.id === topicId);
+                if (!topic) return;
+
+                activeTopicId = topicId;
+                
+                welcomeMessageEl.classList.add('hidden');
+                topicContentEl.classList.remove('hidden');
+
+                topicTitleEl.textContent = topic.title;
+                topicSummaryEl.textContent = topic.summary;
+                
+                // Menetapkan sumber gambar
+                topicImageEl.src = topic.imageUrl; 
+                topicImageEl.alt = "Visual: " + topic.title;
+
+                // Set link visibility and content
+                if (topic.url && topic.url !== '#') {
+                    topicLinkEl.href = topic.url;
+                    topicLinkEl.classList.remove('hidden');
+                } else {
+                    topicLinkEl.href = '#';
+                    topicLinkEl.classList.add('hidden');
+                }
+                
+                topicKeyConceptsEl.innerHTML = '';
+                topic.keyConcepts.forEach(concept => {
+                    const li = document.createElement('li');
+                    li.textContent = concept;
+                    topicKeyConceptsEl.appendChild(li);
+                });
+
+                statusSelectorEl.value = learningStatus[topicId];
+
+                renderTopicList();
+            }
+
+            topicListEl.addEventListener('click', (e) => {
+                const button = e.target.closest('.sidebar-item');
+                if (button) {
+                    const topicId = button.dataset.id;
+                    renderContent(topicId);
+                }
+            });
+
+            statusSelectorEl.addEventListener('change', (e) => {
+                if (activeTopicId) {
+                    learningStatus[activeTopicId] = e.target.value;
+                    renderTopicList();
+                }
+            });
+
+            renderTopicList();
+        });
+    </script>
+</body>
+</html>
