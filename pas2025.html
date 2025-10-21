@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAS Konsentrasi Keahlian TKJ</title>
+    <!-- Memuat Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Mengatur font Inter dan styling dasar */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff; /* Latar belakang putih */
+            color: #1f2937; /* Teks default abu-abu gelap */
+        }
+        /* Styling untuk opsi jawaban yang lebih interaktif */
+        .radio-option input:checked + label {
+            border-color: #6366f1; /* indigo-500 */
+            background-color: #eef2ff; /* indigo-50 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Kelas untuk Feedback */
+        .option-correct {
+            border-color: #10b981 !important; /* emerald-500 */
+            background-color: #d1fae5 !important; /* emerald-100 */
+            color: #065f46 !important; /* emerald-800 */
+        }
+        .option-incorrect {
+            border-color: #f87171 !important; /* red-400 */
+            background-color: #fee2e2 !important; /* red-100 */
+            color: #991b1b !important; /* red-800 */
+        }
+        /* Styling untuk tombol navigasi soal */
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 transition-colors duration-300">
+
+    <!-- Header / Navigasi (Selalu Putih) -->
+    <header class="bg-white shadow-lg sticky top-0 z-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-600">PAS Interaktif Jurusan TKJ SMKN 1 Tanjung Tahun 2025</h1>
+        </div>
+    </header>
+
+    <!-- Progress Tracker (Sticky) -->
+    <div class="sticky top-[73px] bg-white border-b border-gray-200 p-4 z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-sm font-medium mb-2 text-gray-600 flex justify-between">
+                <span>Kemajuan: <span id="progressCount">0</span>/50 Soal</span>
+                <span id="completionStatus" class="text-red-500 font-bold">BELUM SELESAI</span>
+            </p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            
+            <!-- Tombol Toggle (Buka/Tutup) Navigasi Soal -->
+            <button id="navToggle" class="w-full text-left mt-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex justify-between items-center text-sm font-medium text-gray-700 transition">
+                <span>Navigasi Soal (Klik untuk Sembunyikan/Tampilkan)</span>
+                <!-- Ikon panah yang akan berputar saat ditutup -->
+                <svg id="toggleIcon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Panah Bawah (Menandakan bisa ditutup ke bawah) -->
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+
+            <!-- Tombol Navigasi Soal (Collapsible Content) -->
+            <!-- max-h-32 adalah tinggi awal, dan transition-all untuk animasi buka/tutup -->
+            <div id="navButtonsContainer" class="mt-2 transition-all duration-300 ease-in-out overflow-hidden max-h-32">
+                <div id="navButtons" class="flex flex-wrap gap-2 p-1 bg-gray-100 rounded-lg">
+                    <!-- Navigasi akan di-render di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Konten Utama (Formulir Ujian) -->
+    <main class="flex-grow py-8 sm:py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-8">
+                Penialaian Akhir Semester ( PAS ) Kelas XII TKJ 1
+            </h2>
+            
+            <form id="quizForm" class="space-y-10">
+                <!-- Kontainer tempat soal akan di-render oleh JavaScript -->
+                <div id="questionsContainer" class="space-y-10">
+                    <!-- Soal akan masuk di sini -->
+                </div>
+
+                <!-- Tombol Submit -->
+                <div class="flex justify-center pt-6">
+                    <button id="submitButton" type="submit" class="w-full sm:w-auto px-12 py-3 text-lg font-semibold rounded-xl text-white bg-green-600 hover:bg-green-700 transition shadow-lg transform hover:scale-[1.02] disabled:bg-gray-400" disabled>
+                        Selesaikan Ujian (0/50)
+                    </button>
+                </div>
+            </form>
+            
+        </div>
+    </main>
+
+    <!-- Modal Hasil (Selalu Putih) -->
+    <div id="resultModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center hidden p-4 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 transform scale-95 transition-transform duration-300">
+            <h3 class="text-3xl font-bold text-indigo-600 mb-4 text-center">Hasil Ujian Anda</h3>
+            
+            <div class="text-center space-y-4">
+                <div class="p-6 bg-indigo-50 rounded-xl">
+                    <p class="text-xl text-gray-600">Skor Total</p>
+                    <p id="scoreText" class="text-5xl font-extrabold text-gray-900 mt-1">0/50</p>
+                </div>
+                
+                <div class="p-4 bg-white border border-indigo-200 rounded-xl">
+                    <p class="text-xl text-gray-600">Persentase Kelulusan</p>
+                    <p id="percentageText" class="text-4xl font-extrabold text-green-600 mt-1">0%</p>
+                    <p id="keteranganLulus" class="text-sm mt-2 font-medium"></p>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-center">
+                <button onclick="window.location.reload()" class="px-8 py-3 font-semibold rounded-full text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-md">
+                    Ulangi Ujian
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (Selalu Putih) -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500">
+            Dibuat Oleh Akhmad Noor Effendi, S.Kom - Teacher Of TKJ.
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA SOAL UJIAN (50 SOAL TKJ Berdasarkan Kurikulum Spesifik) ---
+        // Catatan: Data soal ini adalah array statis, namun urutan tampil dan opsi akan diacak
+        const originalQuizData = [
+            // --- 1. IP Address Kelas C (10 Soal) ---
+            { question: "Sebuah IP Address 192.168.50.0 di-subnetting menggunakan CIDR /27. Berapakah jumlah host yang valid yang dapat digunakan pada setiap subnet?", options: ["A. 6 host", "B. 14 host", "C. 30 host", "D. 62 host", "E. 126 host"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Diketahui alamat IP host 192.168.10.35/29. Berapakah Network ID dari alamat tersebut?", options: ["A. 192.168.10.0", "B. 192.168.10.8", "C. 192.168.10.32", "D. 192.168.10.40", "E. 192.168.10.64"], answer: "C", correctOptionIndex: 2 },
+            { question: "Pada subnet 192.168.1.128/25, berapakah Broadcast ID-nya?", options: ["A. 192.168.1.191", "B. 192.168.1.127", "C. 192.168.1.254", "D. 192.168.1.255", "E. 192.168.2.0"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Alamat IP mana yang TIDAK VALID digunakan sebagai alamat host pada jaringan 192.168.5.64/26?", options: ["A. 192.168.5.65", "B. 192.168.5.70", "C. 192.168.5.125", "D. 192.168.5.126", "E. 192.168.5.192"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Subnet mask 255.255.255.248 setara dengan notasi CIDR...", options: ["A. /26", "B. /27", "C. /28", "D. /29", "E. /30"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Rentang IP Address Kelas C yang dikhususkan untuk jaringan private (non-routable di internet) adalah...", options: ["A. 10.0.0.0 - 10.255.255.255", "B. 172.16.0.0 - 172.31.255.255", "C. 192.168.0.0 - 192.168.255.255", "D. 169.254.0.0 - 169.254.255.255", "E. 127.0.0.1"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Pada subnet 192.168.20.0/28, berapa IP host terakhir yang dapat digunakan?", options: ["A. 192.168.20.14", "B. 192.168.20.15", "C. 192.168.20.16", "D. 192.168.20.30", "E. 192.168.20.31"], answer: "A", correctOptionIndex: 0 }, 
+            { question: "Berapa banyak subnet yang dihasilkan dari IP Kelas C (Subnet Mask default 255.255.255.0) jika di-subnetting menggunakan /28?", options: ["A. 2 subnet", "B. 4 subnet", "C. 8 subnet", "D. 16 subnet", "E. 32 subnet"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Jumlah total IP Address (Network, Broadcast, dan Host) yang terdapat pada blok CIDR /26 adalah...", options: ["A. 128", "B. 64", "C. 32", "D. 16", "E. 8"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Dalam jaringan 192.168.100.0/27, IP Address 192.168.100.32 adalah...", options: ["A. Host Valid", "B. Broadcast ID", "C. IP Loopback", "D. Network ID Subnet Ke-2", "E. Default Gateway"], answer: "D", correctOptionIndex: 3 }, 
+            // --- 2. Routing Dasar pada Cisco Packet Tracer (10 Soal) ---
+            { question: "Perintah CLI pada Cisco Packet Tracer untuk mengkonfigurasi IP address pada interface FastEthernet 0/0 adalah...", options: ["A. `set ip FastEthernet 0/0 192.168.1.1`", "B. `ip address FastEthernet 0/0 192.168.1.1 255.255.255.0`", "C. `interface Fa0/0` kemudian `ip address 192.168.1.1 255.255.255.0`", "D. `config interface Fa0/0` dan `set ip 192.168.1.1`", "E. `ip set 192.168.1.1`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Perintah yang digunakan pada mode global configuration untuk mengkonfigurasi Static Routing ke jaringan tujuan 192.168.20.0/24 melalui next-hop 192.168.10.2 adalah...", options: ["A. `router rip 192.168.20.0`", "B. `ip route 192.168.20.0 255.255.255.0 192.168.10.2`", "C. `next-hop 192.168.10.2`", "D. `ip static 192.168.20.0 192.168.10.2`", "E. `show ip route 192.168.20.0`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Setelah selesai mengkonfigurasi, perintah manakah yang digunakan untuk menyimpan konfigurasi yang sedang berjalan (running-config) ke memori non-volatile (startup-config)?", options: ["A. `reload`", "B. `erase startup-config`", "C. `copy running-config startup-config`", "D. `show running-config`", "E. `write erase`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Perintah yang digunakan untuk melihat seluruh tabel routing yang ada pada router Cisco adalah...", options: ["A. `show interfaces`", "B. `show version`", "C. `show ip route`", "D. `show protocols`", "E. `ping`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Untuk mengaktifkan protokol routing dinamis RIP versi 2, langkah setelah masuk ke mode `config-router` adalah...", options: ["A. `version 1`", "B. `no auto-summary`", "C. `network 0.0.0.0`", "D. `router ospf 1`", "E. `network [IP network classful]`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Apa tujuan utama dari perintah `no shutdown` yang dimasukkan setelah memilih interface pada router Cisco?", options: ["A. Menghapus konfigurasi IP", "B. Menonaktifkan protokol routing", "C. Mengaktifkan (up) interface tersebut", "D. Mengubah mode interface menjadi trunk", "E. Menyimpan konfigurasi"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Apa perbedaan kode 'S' dan 'C' di output perintah `show ip route`?", options: ["A. 'S' adalah RIP, 'C' adalah OSPF", "B. 'S' adalah Static, 'C' adalah Connected", "C. 'S' adalah Static, 'C' adalah RIP", "D. 'S' adalah IGRP, 'C' adalah Connected", "E. 'S' adalah OSPF, 'C' adalah Static"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Protokol routing dinamis manakah yang dikategorikan sebagai Distance-Vector?", options: ["A. OSPF", "B. EIGRP", "C. IS-IS", "D. BGP", "E. RIP"], answer: "E", correctOptionIndex: 4 }, 
+            { question: "Untuk menguji konektivitas end-to-end dari Router ke host tertentu, perintah yang paling umum digunakan adalah...", options: ["A. `telnet`", "B. `traceroute`", "C. `ping`", "D. `show protocols`", "E. `show running-config`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Untuk masuk dari mode EXEC User (Router>) ke mode EXEC Privileged (Router#), perintah yang digunakan adalah...", options: ["A. `config`", "B. `configure terminal`", "C. `enable`", "D. `interface`", "E. `exit`"], answer: "C", correctOptionIndex: 2 }, 
+            // --- 3. Konfigurasi Network pada Debian 10 Text (5 Soal) ---
+            { question: "File konfigurasi utama di Debian 10 yang digunakan untuk mengatur IP Address secara statis atau DHCP pada interface jaringan adalah...", options: ["A. `/etc/resolve.conf`", "B. `/etc/network/interfaces`", "C. `/etc/hosts`", "D. `/etc/dhcp/dhcpd.conf`", "E. `/etc/init.d/networking`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Untuk menerapkan perubahan IP Address yang telah dikonfigurasi di Debian 10 tanpa me-restart server, perintah service manakah yang paling tepat?", options: ["A. `service networking stop`", "B. `service network restart`", "C. `systemctl restart networking`", "D. `ifconfig eth0 up`", "E. `ip addr flush dev eth0`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Jika Anda ingin mengatur IP statis 192.168.1.10/24 pada interface `eth0`, baris konfigurasi yang benar di file `/etc/network/interfaces` adalah...", options: ["A. `iface eth0 inet dhcp`", "B. `iface eth0 inet static address 192.168.1.10 netmask 255.255.255.0`", "C. `address 192.68.1.10/24`", "D. `network-address 192.168.1.10`", "E. `inet static 192.168.1.10`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Perintah Linux modern yang digunakan untuk menampilkan konfigurasi IP address dan antarmuka jaringan, menggantikan perintah `ifconfig` yang sudah usang, adalah...", options: ["A. `ping`", "B. `route`", "C. `ip addr show`", "D. `netstat`", "E. `ls -l /etc/network/`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Di Debian 10, untuk mengatur DNS client agar dapat menerjemahkan nama domain, konfigurasi dilakukan pada file...", options: ["A. `/etc/network/interfaces`", "B. `/etc/hosts`", "C. `/etc/hostname`", "D. `/etc/resolv.conf`", "E. `/etc/default/grub`"], answer: "D", correctOptionIndex: 3 }, 
+            // --- 4. Konfigurasi DNS Server (BIND9) pada Debian 10 Text (5 Soal) ---
+            { question: "Paket utama yang harus diinstal pada Debian 10 untuk menjalankan layanan DNS Server adalah...", options: ["A. `apache2`", "B. `isc-dhcp-server`", "C. `bind9`", "D. `samba`", "E. `dovecot`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Dalam konfigurasi BIND9, record DNS manakah yang berfungsi untuk memetakan nama domain ke IP Address?", options: ["A. NS (Name Server) Record", "B. CNAME (Canonical Name) Record", "C. MX (Mail Exchanger) Record", "D. A (Address) Record", "E. PTR (Pointer) Record"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "File konfigurasi BIND9 yang digunakan untuk mendaftarkan zona forward dan zona reverse yang baru dibuat (custom domain) adalah...", options: ["A. `/etc/bind/named.conf.options`", "B. `/etc/bind/db.local`", "C. `/etc/bind/named.conf.default-zones`", "D. `/etc/bind/named.conf.local`", "E. `/etc/bind/db.root`"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Untuk menguji apakah DNS Server yang telah dikonfigurasi berfungsi dengan baik dari sisi client, perintah tools manakah yang paling sering digunakan?", options: ["A. `ping`", "B. `netstat`", "C. `apt-get`", "D. `nslookup` atau `dig`", "E. `route`"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Record DNS jenis apakah yang wajib ada dalam file zona forward jika Anda juga ingin mengkonfigurasi Mail Server pada domain tersebut?", options: ["A. CNAME", "B. PTR", "C. MX", "D. SOA", "E. TXT"], answer: "C", correctOptionIndex: 2 }, 
+            // --- 5. Konfigurasi DHCP Server pada Debian 10 Text (5 Soal) ---
+            { question: "Paket yang harus diinstal pada Debian 10 untuk menjalankan layanan DHCP Server adalah...", options: ["A. `apache2`", "B. `isc-dhcp-server`", "C. `bind9`", "D. `samba`", "E. `postfix`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Lokasi default file konfigurasi utama untuk layanan DHCP Server di Debian 10 adalah...", options: ["A. `/etc/network/interfaces`", "B. `/etc/dhcp/dhcpd.conf`", "C. `/etc/default/isc-dhcp-server`", "D. `/var/log/dhcp.log`", "E. `/etc/hosts`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Dalam konfigurasi `dhcpd.conf`, parameter manakah yang berfungsi untuk menentukan rentang IP Address yang akan didistribusikan kepada klien?", options: ["A. `subnet` dan `netmask`", "B. `range`", "C. `default-lease-time`", "D. `option routers`", "E. `option domain-name-servers`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Parameter `max-lease-time` di konfigurasi DHCP berfungsi untuk menentukan...", options: ["A. IP Address maksimum yang boleh dipinjam", "B. Gateway default klien", "C. Batas waktu maksimum klien dapat menggunakan IP Address yang diberikan", "D. Waktu default sewa IP", "E. Domain name yang digunakan klien"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Untuk menerapkan konfigurasi DHCP Server yang baru diubah, perintah pada Debian 10 untuk me-restart layanan adalah...", options: ["A. `systemctl stop dhcp`", "B. `systemctl restart dhcp`", "C. `service dhcpd stop`", "D. `systemctl restart isc-dhcp-server`", "E. `apt-get install dhcpd`"], answer: "D", correctOptionIndex: 3 }, 
+            // --- 6. Konfigurasi Web Server (Apache2) pada Debian 10 Text (5 Soal) ---
+            { question: "Paket Web Server yang paling umum digunakan pada Debian 10 dan harus diinstal untuk menjalankan layanan HTTP adalah...", options: ["A. `nginx`", "B. `vsftpd`", "C. `apache2`", "D. `lighttpd`", "E. `php`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Direktori default pada Debian 10 tempat file-file halaman Web (HTML, PHP) diletakkan agar dapat diakses oleh browser adalah...", options: ["A. `/etc/apache2/`", "B. `/home/`", "C. `/root/`", "D. `/var/www/html/`", "E. `/usr/local/bin/`"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Untuk mengaktifkan konfigurasi Virtual Host baru yang baru dibuat (misalnya `smkn1tanjung.conf`), perintah Apache2 manakah yang digunakan?", options: ["A. `a2dissite smkn1tanjung.conf`", "B. `a2enmod smkn1tanjung.conf`", "C. `a2ensite smkn1tanjung.conf`", "D. `apache2ctl stop`", "E. `systemctl start apache2`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Setelah mengaktifkan konfigurasi Virtual Host baru, langkah WAJIB berikutnya yang harus dilakukan adalah...", options: ["A. Mengubah DNS A Record", "B. Me-restart service Apache2", "C. Menginstal PHP", "D. Mengubah hak akses direktori", "E. Mengganti port default"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Port standar manakah yang digunakan oleh Web Server Apache2 untuk melayani permintaan koneksi HTTP (non-secure)?", options: ["A. 21", "B. 25", "C. 80", "D. 443", "E. 110"], answer: "C", correctOptionIndex: 2 }, 
+            // --- 7. Konfigurasi Samba pada Debian 10 Text (5 Soal) ---
+            { question: "Tujuan utama penginstalan paket Samba di Debian 10 adalah untuk...", options: ["A. Menyediakan layanan email", "B. Berbagi file dan printer dengan sistem operasi Windows", "C. Mengkonfigurasi DNS", "D. Mengatur alamat IP otomatis", "E. Mengamankan koneksi SSH"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "File konfigurasi utama Samba yang harus diedit untuk menentukan folder apa saja yang dibagikan dan hak aksesnya adalah...", options: ["A. `/etc/samba/shares.conf`", "B. `/etc/samba/smb.conf`", "C. `/etc/samba/users.conf`", "D. `/etc/default/samba`", "E. `/etc/samba/groups.conf`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Setelah membuat user di Linux, perintah manakah yang digunakan untuk mendaftarkan user tersebut agar dapat mengakses folder yang dibagikan oleh Samba?", options: ["A. `adduser username`", "B. `smbpasswd -a username`", "C. `chmod 777 foldername`", "D. `systemctl restart smbd`", "E. `usermod -aG samba username`"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Dalam file `smb.conf`, section manakah yang berisi konfigurasi global yang berlaku untuk seluruh layanan Samba, seperti workgroup atau security mode?", options: ["A. `[home]`", "B. `[printers]`", "C. `[global]`", "D. `[shares]`", "E. `[users]`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Jika Anda ingin memastikan hanya pengguna terautentikasi (menggunakan user dan password Samba) yang dapat mengakses folder yang dibagikan, parameter `security` di bagian `[global]` harus diatur sebagai...", options: ["A. `security = share`", "B. `security = user`", "C. `security = domain`", "D. `security = ads`", "E. `security = none`"], answer: "B", correctOptionIndex: 1 }, 
+            // --- 8. Konfigurasi Mail Server dan Web Mail Server (Roundcube) (5 Soal) ---
+            { question: "Dua paket utama yang wajib diinstal pada Debian 10 untuk menjalankan Mail Server (untuk pengiriman dan penerimaan email) adalah...", options: ["A. `apache2` dan `php`", "B. `bind9` dan `isc-dhcp-server`", "C. `postfix` dan `dovecot`", "D. `samba` dan `ftp`", "E. `roundcube` dan `mysql`"], answer: "C", correctOptionIndex: 2 }, 
+            { question: "Protokol manakah yang bertanggung jawab untuk mengirimkan email dari server klien ke Mail Server dan antar Mail Server?", options: ["A. POP3", "B. IMAP", "C. DHCP", "D. SMTP", "E. HTTP"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Web Mail Server Roundcube berfungsi sebagai...", options: ["A. Mesin penyimpan email di server", "B. Antarmuka berbasis web untuk mengakses email", "C. Protokol penerimaan email", "D. Sistem enkripsi email", "E. Firewall untuk email"], answer: "B", correctOptionIndex: 1 }, 
+            { question: "Port 993 pada Mail Server digunakan untuk koneksi aman (enkripsi SSL/TLS) menggunakan protokol...", options: ["A. POP3", "B. POP3S", "C. IMAP", "D. IMAPS", "E. SMTPS"], answer: "D", correctOptionIndex: 3 }, 
+            { question: "Paket Mail Access Agent (MAA) yang digunakan oleh Roundcube untuk membaca dan mengambil email yang tersimpan di server adalah...", options: ["A. Postfix (SMTP)", "B. BIND9 (DNS)", "C. Dovecot (IMAP/POP3)", "D. Apache2 (HTTP)", "E. Samba (Sharing)"], answer: "C", correctOptionIndex: 2 }
+        ];
+
+        // Variabel global untuk menyimpan data kuis yang sudah diacak dan jawaban pengguna
+        let quizData = [];
+        let userAnswers = {}; 
+        const totalQuestions = originalQuizData.length;
+
+        // Fungsi utilitas untuk mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // --- LOGIKA APLIKASI UTAMA ---
+
+        const questionsContainer = document.getElementById('questionsContainer');
+        const quizForm = document.getElementById('quizForm');
+        const resultModal = document.getElementById('resultModal');
+        const scoreText = document.getElementById('scoreText');
+        const percentageText = document.getElementById('percentageText');
+        const navButtons = document.getElementById('navButtons');
+        const progressBar = document.getElementById('progressBar');
+        const progressCount = document.getElementById('progressCount');
+        const submitButton = document.getElementById('submitButton');
+        const completionStatus = document.getElementById('completionStatus');
+        const keteranganLulus = document.getElementById('keteranganLulus');
+
+        // NEW: Elemen untuk fitur collapsible
+        const navToggle = document.getElementById('navToggle');
+        const navButtonsContainer = document.getElementById('navButtonsContainer');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+
+        // 1. Persiapan Data Kuis (Acak Soal, Acak Opsi, dan Bersihkan Teks)
+        function prepareQuizData() {
+            // 1. Buat salinan data dan acak urutan soal (Questions)
+            let shuffledQuestions = [...originalQuizData];
+            shuffleArray(shuffledQuestions); // Mengacak urutan soal
+
+            quizData = shuffledQuestions.map((q, qIndex) => {
+                
+                // 1. Bersihkan opsi asli (hapus 'A. ', 'B. ', dll.)
+                const cleanedOriginalOptions = q.options.map((text, index) => {
+                    const originalLetter = String.fromCharCode(65 + index);
+                    let cleanedText = text;
+
+                    // Hapus prefix jika teks dimulai dengan huruf opsi aslinya
+                    if (text.startsWith(originalLetter + '.')) {
+                        cleanedText = text.substring(2).trim();
+                    }
+                    
+                    // Struktur data untuk pelacakan dan pengacakan
+                    return { text: cleanedText, index };
+                });
+                
+                // 2. Identifikasi teks jawaban yang benar (setelah dibersihkan)
+                const correctOptionText = cleanedOriginalOptions[q.correctOptionIndex].text;
+
+                // 3. Acak urutan opsi yang sudah bersih
+                shuffleArray(cleanedOriginalOptions);
+
+                // 4. Cari tahu index baru dari jawaban yang benar (berdasarkan teks yang bersih)
+                const newCorrectIndex = cleanedOriginalOptions.findIndex(opt => opt.text === correctOptionText);
+
+                // 5. Konversi index baru menjadi huruf opsi (A, B, C, D, E)
+                const newCorrectLetter = String.fromCharCode(65 + newCorrectIndex);
+
+                return {
+                    ...q,
+                    shuffledOptions: cleanedOriginalOptions.map(opt => opt.text), // Simpan hanya teks yang bersih
+                    correctAnswerLetter: newCorrectLetter // Jawaban yang benar (A-E) setelah diacak
+                };
+            });
+        }
+
+        // 2. Rendering Soal ke Halaman Web
+        function renderQuiz() {
+            questionsContainer.innerHTML = '';
+            navButtons.innerHTML = '';
+
+            // Pastikan data yang dirender adalah yang sudah diacak
+            quizData.forEach((q, index) => {
+                const questionNumber = index + 1;
+                const questionId = `question${index}`;
+                
+                // Card Soal
+                const questionCard = document.createElement('div');
+                // Menggunakan bg-white dan menghilangkan dark:bg-gray-800
+                questionCard.id = questionId;
+                questionCard.className = 'bg-white p-6 rounded-xl shadow-lg border border-gray-200 transition duration-200 hover:shadow-xl';
+                
+                let htmlContent = `<p class="text-lg font-semibold mb-4 text-gray-900">
+                                    <a id="q${questionNumber}"></a>
+                                    <span class="text-indigo-600 mr-2">${questionNumber}.</span> ${q.question}
+                                </p>`;
+                
+                // Opsi Jawaban
+                q.shuffledOptions.forEach((optionText, optionIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optionIndex);
+                    const fullId = `${questionId}-${optionLetter}`;
+                    
+                    const optionDisplay = optionText; 
+
+                    htmlContent += `
+                        <div class="radio-option mt-3" data-qindex="${index}">
+                            <input type="radio" id="${fullId}" name="${questionId}" value="${optionLetter}" class="hidden peer" data-qindex="${index}">
+                            <label for="${fullId}" class="flex items-start p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150 text-gray-700 text-base leading-relaxed">
+                                <span class="font-bold mr-3 text-indigo-500">${optionLetter}.</span> 
+                                ${optionDisplay}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                questionCard.innerHTML = htmlContent;
+                questionsContainer.appendChild(questionCard);
+
+                // Tombol Navigasi
+                const navBtn = document.createElement('a');
+                navBtn.href = `#q${questionNumber}`;
+                navBtn.id = `nav-${index}`;
+                // Kelas navigasi disesuaikan untuk latar putih
+                navBtn.className = 'nav-btn bg-gray-300 text-gray-800 hover:bg-indigo-400 hover:text-white';
+                navBtn.textContent = questionNumber;
+                navButtons.appendChild(navBtn);
+            });
+
+            // Tambahkan event listener untuk pilihan jawaban
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', handleOptionClick);
+            });
+        }
+
+        // NEW: Fungsi untuk Toggle Navigasi
+        function handleToggleNav() {
+            // Toggle class max-h-0 untuk menyembunyikan/menampilkan
+            const isCollapsed = navButtonsContainer.classList.toggle('max-h-0');
+            
+            // Toggle rotasi ikon
+            if (isCollapsed) {
+                // Saat ditutup, panah menunjuk ke atas (siap untuk membuka)
+                toggleIcon.classList.add('rotate-180'); 
+                navButtonsContainer.classList.remove('mt-2'); // Hapus margin atas saat tersembunyi
+            } else {
+                // Saat terbuka, panah menunjuk ke bawah (siap untuk menutup)
+                toggleIcon.classList.remove('rotate-180');
+                navButtonsContainer.classList.add('mt-2'); // Tambahkan margin atas saat terlihat
+            }
+        }
+
+
+        // 3. Handle Klik Opsi (Tracking)
+        function handleOptionClick(event) {
+            const selectedRadio = event.target;
+            const qIndex = parseInt(selectedRadio.dataset.qindex);
+            const questionId = `question${qIndex}`;
+            const questionCard = document.getElementById(questionId);
+            const selectedOptionLetter = selectedRadio.value;
+            
+            // 1. Hapus semua feedback visual
+            questionCard.querySelectorAll('label').forEach(label => {
+                label.classList.remove('option-correct', 'option-incorrect');
+            });
+
+            // 2. Update userAnswers
+            if (!userAnswers.hasOwnProperty(qIndex)) {
+                // Hanya hitung peningkatan jika ini adalah jawaban pertama untuk soal ini
+                updateProgress(1); 
+            }
+            userAnswers[qIndex] = selectedOptionLetter;
+            
+            // 3. Update Navigasi
+            const navBtn = document.getElementById(`nav-${qIndex}`);
+            navBtn.classList.remove('bg-gray-300', 'text-gray-800');
+            navBtn.classList.add('bg-green-500', 'text-white');
+        }
+
+        // 4. Update Progress Bar
+        function updateProgress(change = 0) {
+            const answeredCount = Object.keys(userAnswers).length + change;
+            const percentage = (answeredCount / totalQuestions) * 100;
+
+            progressBar.style.width = `${percentage}%`;
+            progressCount.textContent = answeredCount;
+
+            if (answeredCount === totalQuestions) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Selesai & Cek Nilai';
+                completionStatus.textContent = 'SELESAI';
+                completionStatus.classList.remove('text-red-500');
+                completionStatus.classList.add('text-green-500');
+            } else {
+                submitButton.disabled = true;
+                submitButton.textContent = `Selesaikan Ujian (${answeredCount}/${totalQuestions})`;
+                completionStatus.textContent = 'BELUM SELESAI';
+                completionStatus.classList.add('text-red-500');
+                completionStatus.classList.remove('text-green-500');
+            }
+        }
+
+        // 5. Logika Submit dan Penilaian Akhir
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                // Mengganti alert() dengan pesan di console dan scroll ke atas
+                console.error('Mohon jawab semua 50 soal sebelum menekan tombol Selesai.');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            let finalScore = 0;
+
+            // Hitung skor berdasarkan jawaban yang tersimpan di userAnswers
+            for (let i = 0; i < totalQuestions; i++) {
+                const userAnswer = userAnswers[i];
+                const correctAnswer = quizData[i].correctAnswerLetter;
+
+                // Tampilkan Feedback visual di soal setelah submit
+                const qCard = document.getElementById(`question${i}`);
+                const correctOptionLetter = correctAnswer;
+                const correctOptionInput = qCard.querySelector(`input[value="${correctOptionLetter}"]`);
+                if (correctOptionInput) {
+                    const correctLabel = correctOptionInput.nextElementSibling;
+                    correctLabel.classList.add('option-correct');
+
+                    if (userAnswer === correctAnswer) {
+                        finalScore++;
+                    } else {
+                        const userSelectedInput = qCard.querySelector(`input[value="${userAnswer}"]`);
+                        if (userSelectedInput) {
+                            const userSelectedLabel = userSelectedInput.nextElementSibling;
+                            userSelectedLabel.classList.add('option-incorrect');
+                        }
+                    }
+                }
+                
+                // Nonaktifkan semua opsi setelah submit
+                qCard.querySelectorAll('input').forEach(input => input.disabled = true);
+            }
+            
+            // Hitung persentase
+            const percentage = ((finalScore / totalQuestions) * 100).toFixed(2);
+            
+            // Tampilkan hasil di modal
+            scoreText.textContent = `${finalScore}/${totalQuestions}`;
+            percentageText.textContent = `${percentage}%`;
+
+            // Tentukan warna dan keterangan berdasarkan KKM (contoh: KKM 70%)
+            if (percentage >= 70) {
+                percentageText.classList.add('text-green-600');
+                percentageText.classList.remove('text-red-600');
+                keteranganLulus.textContent = "SELAMAT! Anda LULUS dengan nilai yang memuaskan.";
+                keteranganLulus.classList.add('text-green-600');
+                keteranganLulus.classList.remove('text-red-600');
+            } else {
+                percentageText.classList.add('text-red-600');
+                percentageText.classList.remove('text-green-600');
+                keteranganLulus.textContent = "MAAF, Anda Belum Lulus. Coba ulangi dan pelajari lagi materinya!";
+                keteranganLulus.classList.add('text-red-600');
+                keteranganLulus.classList.remove('text-green-600');
+            }
+
+            // Tampilkan modal
+            resultModal.classList.remove('hidden');
+            document.querySelector('.scale-95').classList.add('scale-100');
+            submitButton.disabled = true; // Nonaktifkan tombol setelah submit
+        });
+
+        // 6. Inisialisasi Aplikasi
+        window.onload = function() {
+            prepareQuizData(); // Acak soal dan opsi sebelum render
+            renderQuiz();      // Tampilkan soal
+            updateProgress();  // Update status awal
+            
+            // NEW: Tambahkan event listener untuk tombol toggle
+            if (navToggle) {
+                navToggle.addEventListener('click', handleToggleNav);
+            }
+        };
+
+    </script>
+</body>
+</html>
