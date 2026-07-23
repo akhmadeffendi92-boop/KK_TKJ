@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul KK TKJ - Identifikasi & Pemilihan Perangkat Jaringan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col antialiased">
+
+    <!-- HEADER BAR -->
+    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-indigo-600 rounded-xl shadow-md">
+                        <i class="fa-solid fa-network-wired text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg sm:text-xl tracking-tight leading-tight">Materi KK TKJ Interaktif</h1>
+                        <p class="text-xs text-indigo-200">Perencanaan & Pengelolaan Jaringan Komputer</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <span class="bg-indigo-800 text-indigo-200 text-xs px-3 py-1.5 rounded-full border border-indigo-700 font-medium">
+                        <i class="fa-solid fa-graduation-cap mr-1"></i> Kelas XI / XII SMK TKJ
+                    </span>
+                    <button onclick="window.print()" class="bg-indigo-700 hover:bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-lg transition duration-200 flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-print"></i> Cetak / PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION TABS -->
+        <nav class="bg-indigo-950 border-t border-indigo-800/50 px-2 sm:px-6 overflow-x-auto custom-scrollbar">
+            <div class="max-w-7xl mx-auto flex space-x-1 sm:space-x-2 py-2 min-w-max">
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn active text-white bg-indigo-600 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-microchip"></i> <span>1. Identifikasi Perangkat</span>
+                </button>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn text-indigo-300 hover:text-white hover:bg-indigo-800/60 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> <span>2. Analisis Kebutuhan</span>
+                </button>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn text-indigo-300 hover:text-white hover:bg-indigo-800/60 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project"></i> <span>3. Skenario Riil</span>
+                </button>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn text-indigo-300 hover:text-white hover:bg-indigo-800/60 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-medical-alt"></i> <span>4. Studi Kasus</span>
+                </button>
+                <button onclick="switchTab('tab-5')" id="btn-tab-5" class="tab-btn text-indigo-300 hover:text-white hover:bg-indigo-800/60 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> <span>5. Uji Kompetensi</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ==========================================
+             TAB 1: PENGERTIAN & IDENTIFIKASI PERANGKAT
+             ========================================== -->
+        <section id="tab-1" class="tab-content active space-y-8">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-block bg-indigo-500/30 text-indigo-100 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-400/30 mb-3">Modul 1: Dasar Hardware Jaringan</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Mengidentifikasi Perangkat Jaringan Komputer</h2>
+                    <p class="mt-2 text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        Memahami secara menyeluruh klasifikasi, karakteristik teknis, fungsi spesifik, dan port arsitektur dari setiap perangkat jaringan aktif dan pasif yang digunakan dalam infrastruktur modern.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Device Concept Overview -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-indigo-600"></i> Pengertian Perangkat Jaringan
+                </h3>
+                <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                    <strong>Perangkat Jaringan Komputer</strong> adalah seluruh komponen keras (hardware) yang saling terhubung untuk memfasilitasi komunikasi data, berbagi sumber daya (resource sharing), transmisi paket data, serta keamanan lalu lintas data antar entitas komputasi. Dalam praktiknya, perangkat dibagi menjadi dua kategori utama:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-2 font-bold text-slate-800 mb-2">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> Perangkat Aktif (Active Hardware)
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Perangkat yang membutuhkan daya listrik untuk mengolah, mentransformasikan, mengarahkan, dan memperkuat sinyal data digital. Contoh: Router, Switch, Access Point, Firewall Hardware, ONT/Modem.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-2 font-bold text-slate-800 mb-2">
+                            <i class="fa-solid fa-ethernet text-blue-500"></i> Perangkat Pasif (Passive Hardware)
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Perangkat penyalur/media perantara yang tidak membutuhkan energi listrik untuk memproses bit data secara logis. Contoh: Kabel UTP/STP, Fiber Optic, Patch Panel, Connector RJ-45, Modular Jack, Server Rack.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Hardware Catalogue -->
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked text-indigo-600"></i> Katalog & Identifikasi Perangkat Jaringan
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- 1. Router -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 3 (Network)</span>
+                            <i class="fa-solid fa-route text-2xl text-indigo-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">1. Router</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Perangkat penghubung antar segmen IP subnet yang berbeda.</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Menentukan jalur data terbaik (routing), melakukan Network Address Translation (NAT), DHCP Server, dan Firewall Filtering.</div>
+                            <div><strong>Jenis Umum:</strong>
+                                <ul class="list-disc list-inside text-slate-600 mt-1">
+                                    <li>MikroTik RouterBOARD (RB750Gr3, RB1100AHx4)</li>
+                                    <li>Cisco ISR Series (2911, 4331)</li>
+                                    <li>Wireless Home Router (TP-Link, D-Link)</li>
+                                </ul>
+                            </div>
+                            <div><strong>Tipe Port:</strong> Ethernet (RJ-45), SFP/SFP+ Optical, Console Port (RJ-45/DB9).</div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Switch (Managed vs Unmanaged) -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 2 / Layer 3</span>
+                            <i class="fa-solid fa-network-wired text-2xl text-emerald-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">2. Switch Ethernet</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Konsentrator transmisi frame data berdasarkan MAC Address.</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Menghubungkan banyak perangkat lokal (LAN) tanpa tumbukan paket (collision domain terisolasi per port).</div>
+                            <div><strong>Kategori:</strong>
+                                <ul class="list-disc list-inside text-slate-600 mt-1">
+                                    <li><strong>Unmanaged:</strong> Plug-and-play, tanpa konfigurasi.</li>
+                                    <li><strong>Managed Layer 2:</strong> Mendukung VLAN, Spanning Tree (STP), Port Security.</li>
+                                    <li><strong>Layer 3 Switch:</strong> Mendukung routing inter-VLAN internal kecepatan tinggi.</li>
+                                    <li><strong>PoE Switch:</strong> Menyalurkan listrik & data via kabel LAN (IEEE 802.3af/at).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Access Point (AP) -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-sky-100 text-sky-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 1 & 2</span>
+                            <i class="fa-solid fa-wifi text-2xl text-sky-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">3. Access Point (Wireless)</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Memancarkan gelombang radio (RF) untuk koneksi nirkabel.</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Mengubah sinyal kabel LAN (Ethernet) menjadi sinyal frekuensi radio (2.4 GHz & 5 GHz / 6 GHz).</div>
+                            <div><strong>Standar Wi-Fi:</strong> Wi-Fi 4 (802.11n), Wi-Fi 5 (802.11ac), Wi-Fi 6 (802.11ax).</div>
+                            <div><strong>Model Operasi:</strong>
+                                <ul class="list-disc list-inside text-slate-600 mt-1">
+                                    <li><strong>Standalone:</strong> Konfigurasi mandiri satu per satu.</li>
+                                    <li><strong>Controller Managed:</strong> Dikelola terpusat (Aruba, UniFi Controller, Ruijie Reyee).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Firewall Hardware / UTM -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 3 - Layer 7</span>
+                            <i class="fa-solid fa-shield-halved text-2xl text-rose-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">4. Firewall Hardware / UTM</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Perangkat garda depan keamanan perimeter jaringan.</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Deep Packet Inspection (DPI), Antivirus Gateway, Intrusion Prevention System (IPS), Web Filtering, VPN Concentrator.</div>
+                            <div><strong>Vendor Populer:</strong> Fortinet FortiGate, Palo Alto Networks, Sophos XGS, Cisco Firepower.</div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Optical Network Terminal (ONT / Modem) -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 1 & 2</span>
+                            <i class="fa-solid fa-box text-2xl text-amber-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">5. ONT / ONU Modem</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Perangkat terminating jaringan Fiber to the Home (FTTH).</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Konversi sinyal cahaya (optical signal) dari jaringan GPON/EPON ISP menjadi sinyal elektrik Ethernet/Wi-Fi.</div>
+                            <div><strong>Interface:</strong> Port SC/UPC Fiber Optic, Port RJ-45 LAN, Port Telp (RJ-11).</div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Media Converter & SFP Transceiver -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2.5 py-1 rounded">OSI Layer 1</span>
+                            <i class="fa-solid fa-arrows-repeat text-2xl text-purple-600"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-lg">6. Media Converter & SFP</h4>
+                        <p class="text-xs text-slate-500 mt-1 mb-3">Penyambung antar jenis transmisi media fisik berbeda.</p>
+                        <div class="space-y-2 text-xs text-slate-700">
+                            <div><strong>Fungsi Utama:</strong> Memperjauh jarak transmisi LAN melebihi batas 100 meter kabel tembaga dengan mengonversinya ke Fiber Optic.</div>
+                            <div><strong>Komponen:</strong> Transceiver SFP (Small Form-factor Pluggable) 1Gbps / SFP+ 10Gbps.</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Detailed Cable & Passive Components Table -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cable-car text-indigo-600"></i> Media Transmisi & Perangkat Pasif Jaringan
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-600 border-collapse">
+                        <thead class="bg-slate-100 text-slate-800 uppercase font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Nama Komponen</th>
+                                <th class="p-3">Spesifikasi / Standar</th>
+                                <th class="p-3">Kecepatan Max</th>
+                                <th class="p-3">Jarak Maksimal</th>
+                                <th class="p-3">Penggunaan Utama</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-medium text-slate-900">Kabel UTP Cat5e</td>
+                                <td class="p-3">Unshielded Twisted Pair, 100 MHz</td>
+                                <td class="p-3">100 Mbps - 1 Gbps</td>
+                                <td class="p-3">100 Meter</td>
+                                <td class="p-3">Jaringan PC Client standar SOHO/Sekolah lama</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-medium text-slate-900">Kabel UTP/STP Cat6</td>
+                                <td class="p-3">Spline separator, 250 MHz</td>
+                                <td class="p-3">1 Gbps (10 Gbps < 55m)</td>
+                                <td class="p-3">100 Meter</td>
+                                <td class="p-3">Standar wajib instalasi LAN kantor & lab modern</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-medium text-slate-900">Fiber Optic Single-Mode (OS2)</td>
+                                <td class="p-3">Core 9 micron, gelombang 1310/1550nm</td>
+                                <td class="p-3">10 Gbps - 100 Gbps+</td>
+                                <td class="p-3">10 km - 40 km+</td>
+                                <td class="p-3">Koneksi Backbone antar gedung, WAN ISP, Fiber ISP</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-medium text-slate-900">Fiber Optic Multi-Mode (OM3/OM4)</td>
+                                <td class="p-3">Core 50/62.5 micron, LED/VCSEL 850nm</td>
+                                <td class="p-3">10 Gbps - 40 Gbps</td>
+                                <td class="p-3">300m - 550m</td>
+                                <td class="p-3">Koneksi antarrack di dalam Data Center / Ruang Server</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-medium text-slate-900">Patch Panel</td>
+                                <td class="p-3">24-Port / 48-Port Cat6 Keystone</td>
+                                <td class="p-3">N/A (Pasif)</td>
+                                <td class="p-3">N/A</td>
+                                <td class="p-3">Terminasi rapian kabel horizontal di Server Rack</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 2: ANALISIS KEBUTUHAN PENGGUNA
+             ========================================== -->
+        <section id="tab-2" class="tab-content space-y-8">
+            <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-block bg-emerald-500/30 text-emerald-100 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-400/30 mb-3">Modul 2: Perencanaan & Sizing</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Memilih Perangkat Sesuai Kebutuhan Pengguna</h2>
+                    <p class="mt-2 text-emerald-100 text-sm sm:text-base leading-relaxed">
+                        Metodologi analisis teknis berdasarkan kepadatan pengguna, kebutuhan throughput, standar keamanan, ketersediaan anggaran, dan reliabilitas jaringan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Parameters Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold text-lg mb-3">1</div>
+                    <h4 class="font-bold text-slate-900 mb-2">User Density & Kepadatan Port</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Hitung jumlah end-device aktif (PC, AP, IP Camera, Printer). Tambahkan margin ekspansi 20-30%. Menentukan apakah membutuhkan switch 8, 16, 24, atau 48 port.
+                    </p>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center font-bold text-lg mb-3">2</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Throughput & Bandwidth</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bedakan jaringan kelas Fast Ethernet (100Mbps) untuk transaksi teks biasa dengan Gigabit (1000Mbps) atau 10G untuk transfer file besar, video streaming, & server backup.
+                    </p>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center font-bold text-lg mb-3">3</div>
+                    <h4 class="font-bold text-slate-900 mb-2">Power over Ethernet (PoE)</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Memeriksa apakah perangkat seperti Access Point dan IP Cam membutuhkan daya via LAN. Hitung Total PoE Budget (Watt) perangkat penerima (IEEE 802.3af/at/bt).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profile Matrix Comparison -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-table-cells text-emerald-600"></i> Matriks Rekomendasi Spesifikasi Perangkat per Segmen
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-600">
+                        <thead class="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Kategori Pengguna</th>
+                                <th class="p-3">Jumlah Client</th>
+                                <th class="p-3">Spesifikasi Router</th>
+                                <th class="p-3">Spesifikasi Switch</th>
+                                <th class="p-3">Spesifikasi Wi-Fi / AP</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-slate-900">SOHO / Rumahan</td>
+                                <td class="p-3">1 - 10 User</td>
+                                <td class="p-3">Integrated Broadband Wireless Router (e.g. TP-Link Archer / Mikrotik hEX)</td>
+                                <td class="p-3">Unmanaged Switch 8 Port Gigabit (Optional)</td>
+                                <td class="p-3">Built-in Integrated Wi-Fi 5 (802.11ac)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-slate-900">Cafe / Warung Kopi</td>
+                                <td class="p-3">20 - 60 User</td>
+                                <td class="p-3">MikroTik RB750Gr3 / RB960PGS (Bandwidth Management & Hotspot Captive Portal)</td>
+                                <td class="p-3">Managed L2 Switch 16-24 Port PoE</td>
+                                <td class="p-3">Enterprise Access Point Dual Band Ceiling Mount (Ruijie/UniFi/Aruba)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-slate-900">Lab Komputer Sekolah</td>
+                                <td class="p-3">30 - 100 User</td>
+                                <td class="p-3">MikroTik RB1100AHx4 / Cisco ISR 4321 (Routing Inter-VLAN & Firewall)</td>
+                                <td class="p-3">Managed L2 Switch Gigabit 24/48 Port (Support VLAN, LACP Trunking)</td>
+                                <td class="p-3">Dedicated Indoor Access Point Wi-Fi 6 khusus Guru/Siswa</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-semibold text-slate-900">Gedung Perkantoran / Enterprise</td>
+                                <td class="p-3">100 - 500+ User</td>
+                                <td class="p-3">Hardware Firewall / Next-Gen Router (FortiGate 60F / Cisco ISR 4331) Redundant WAN</td>
+                                <td class="p-3">Core L3 Switch Stackable + Access Switch Managed PoE 48 Port</td>
+                                <td class="p-3">Controller-Managed Access Points Wi-Fi 6 dengan Seamless Roaming</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Interactive Device Estimator Calculator -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-calculator text-emerald-600"></i> Alat Interaktif: Simulator Estimator Perangkat Jaringan
+                </h3>
+                <p class="text-xs text-emerald-800 mb-4">Masukkan data kebutuhan pengguna di bawah ini untuk melihat rekomendasi paket perangkat secara otomatis:</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Perangkat Kabel (PC/IP Cam)</label>
+                        <input type="number" id="calc-wired" value="30" class="w-full text-sm p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Estimasi User Wireless (Wi-Fi)</label>
+                        <input type="number" id="calc-wireless" value="50" class="w-full text-sm p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ketersediaan Bandwidth ISP (Mbps)</label>
+                        <input type="number" id="calc-bandwidth" value="100" class="w-full text-sm p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button onclick="calculateRequirement()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-lg shadow transition">
+                    Hitung Rekomendasi
+                </button>
+
+                <div id="calc-result" class="mt-4 p-4 bg-white rounded-xl border border-emerald-300 hidden">
+                    <h4 class="font-bold text-slate-900 text-sm mb-2 border-b pb-2">Hasil Rekomendasi Sistem:</h4>
+                    <ul id="calc-list" class="list-disc list-inside text-xs text-slate-700 space-y-1">
+                        <!-- Dynamic output -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 3: SKENARIO RELEVAN (5 SKENARIO)
+             ========================================== -->
+        <section id="tab-3" class="tab-content space-y-8">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-block bg-blue-500/30 text-blue-100 text-xs font-semibold px-3 py-1 rounded-full border border-blue-400/30 mb-3">Modul 3: Implementasi Kontekstual</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">5 Skenario Relevan Perencanaan Jaringan</h2>
+                    <p class="mt-2 text-blue-100 text-sm sm:text-base leading-relaxed">
+                        Skenario lapangan konkret untuk membantu peserta didik membayangkan penerapan nyata pemilihan hardware dalam berbagai lingkungan kerja.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+
+                <!-- Scenario 1 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">Skenario 1</span>
+                        <i class="fa-solid fa-gamepad text-xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Warnet eSport & Cyber Cafe Modern (30 PC High-End)</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        <strong>Kondisi:</strong> Pemilik usaha membutuhkan latency sangat rendah (ping kecil & stabil), zero packet loss, bandwidth internet 200 Mbps Dedicated, dan isolasi jaringan antara PC Client game dengan lalu lintas Wi-Fi pengunjung cafe.
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><strong class="text-slate-900">Rekomendasi Perangkat:</strong> Router MikroTik CCR1009 / RB1100AHx4 (Manajemen Queue PCQ & Dual WAN ISP).</div>
+                        <div><strong class="text-slate-900">Switching:</strong> Switch Gigabit Managed L2 36/48 Port (Full Cat6 UTP cabling ke setiap desk PC).</div>
+                        <div><strong class="text-slate-900">Wireless:</strong> Access Point Dual-Band terpisah di VLAN Guest khusus pengunjung cafe.</div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Skenario 2</span>
+                        <i class="fa-solid fa-school text-xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Lab Komputer Sekolah SMK TKJ (40 PC Client + Server Local)</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        <strong>Kondisi:</strong> Digunakan untuk Ujian Berbasis Komputer (CBT), praktikum networking, transfer file ISO sistem operasi antar client dan server local secara masif.
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><strong class="text-slate-900">Rekomendasi Perangkat:</strong> Switch Managed Gigabit 48-Port dengan Port Uplink SFP 10G ke Server Lokal.</div>
+                        <div><strong class="text-slate-900">Fitur Wajib Switch:</strong> Support VLAN ID, Port Security (membatasi MAC Address), dan Spanning Tree Protocol (STP) untuk mencegah loop akibat siswa salah colok kabel.</div>
+                        <div><strong class="text-slate-900">Router Gateway:</strong> MikroTik RB750Gr3 / RB3011 untuk pemblokiran situs non-edukatif & NAT.</div>
+                    </div>
+                </div>
+
+                <!-- Scenario 3 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">Skenario 3</span>
+                        <i class="fa-solid fa-building text-xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Perkantoran 3 Lantai (150 Karyawan + VoIP Phone + IP Cam)</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        <strong>Kondisi:</strong> Setiap lantai diisi divisi berbeda (HRD, Keuangan, IT, Sales). Butuh pemisahan keamanan antar divisi, telepon IP (VoIP), 16 unit IP Camera CCTV, dan access point Wi-Fi di seluruh area.
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><strong class="text-slate-900">Lantai 1 (Ruang Server):</strong> Core L3 Switch Stackable & Hardware Firewall FortiGate 60F / 80F.</div>
+                        <div><strong class="text-slate-900">Lantai 2 & 3:</strong> Distribution / Access Switch 24-Port PoE+ (IEEE 802.3at) untuk mensuplai daya ke IP Phone & Ceiling Access Point tanpa perlu adaptor daya terpisah.</div>
+                        <div><strong class="text-slate-900">Media Antar Lantai:</strong> Patch Cord Fiber Optic Multimode OM3 terhubung via modul SFP+.</div>
+                    </div>
+                </div>
+
+                <!-- Scenario 4 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">Skenario 4</span>
+                        <i class="fa-solid fa-mug-saucer text-xl text-amber-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Coworking Space & Outdoor Garden Cafe (100+ Wireless Client)</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        <strong>Kondisi:</strong> Mayoritas pelanggan menggunakan laptop & smartphone nirkabel. Area outdoor terkena hujan ringan dan terik matahari, butuh fitur Captive Portal (login voucher jam-jaman).
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><strong class="text-slate-900">Outdoor Wi-Fi:</strong> Access Point Outdoor Weatherproof IP67 (e.g., Ruijie Reyee RG-RAP6260 / TP-Link EAP225-Outdoor).</div>
+                        <div><strong class="text-slate-900">Management:</strong> Cloud-managed Wi-Fi Controller untuk memantau trafik client dan Seamless Roaming tanpa terputus saat berpindah tempat.</div>
+                    </div>
+                </div>
+
+                <!-- Scenario 5 -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">Skenario 5</span>
+                        <i class="fa-solid fa-tower-cell text-xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900">Koneksi Antar Gedung Cabang Jarak 3 Km (Point-to-Point Wireless)</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        <strong>Kondisi:</strong> Menghubungkan Kantor Pusat dengan Gedung Gudang berjarak 3 Km tanpa jalur galian fisik kabel fiber optik di jalan raya publik.
+                    </p>
+                    <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <div><strong class="text-slate-900">Rekomendasi Perangkat:</strong> Sepasang Antena Wireless Outdoor Point-to-Point (PtP) High Gain Dish 5 GHz (e.g. Ubiquiti PowerBeam 5AC / Mikrotik Wireless Wire Dish).</div>
+                        <div><strong class="text-slate-900">Syarat Teknis:</strong> Line of Sight (LOS) sempurna tanpa halangan pohon atau gedung tinggi di daerah Fresnel Zone.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 4: STUDI KASUS (MINIMAL 5 STUDI KASUS)
+             ========================================== -->
+        <section id="tab-4" class="tab-content space-y-8">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-block bg-purple-500/30 text-purple-100 text-xs font-semibold px-3 py-1 rounded-full border border-purple-400/30 mb-3">Modul 4: Problem Solving & Trouble Analysis</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">5 Studi Kasus Evaluasi & Rekayasa Jaringan</h2>
+                    <p class="mt-2 text-purple-100 text-sm sm:text-base leading-relaxed">
+                        Analisis kegagalan/masalah nyata di lapangan, identifikasi akar penyebab (*root cause*), dan penetapan solusi pemilihan perangkat replacement yang tepat.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+
+                <!-- Case Study 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-lg mb-2">
+                        <span class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm">1</span>
+                        Kasus: Wi-Fi Restoran Sering "Connected No Internet" & Broadcast Storm
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
+                        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <h5 class="font-bold text-rose-900 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Permasalahan (Problem)</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Restoran menggunakan 1 unit Wireless Router rumahan standar untuk 80 pengunjung bersamaan. Wi-Fi sering hang, IP Address habis (DHCP Subnet /24 penuh), dan pengunjung saling mengintersepsi lalu lintas data.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h5 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Analisis Kebutuhan</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Sifat Wireless Router rumahan tidak didesain menampung concurrency user melebihi 15-20 device. Tidak ada isolasi client (AP Isolation), CPU Router *overload* 100%, serta alokasi pool IP terlalu sempit.
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-emerald-900 mb-1"><i class="fa-solid fa-square-check mr-1"></i> Solusi Perangkat Optimal</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Ganti ke <strong>MikroTik RB4011</strong> (Dedicated Router & DHCP Subnet /22 = 1000 IP) + <strong>2-3 Unit Ceiling Enterprise Access Point Dual-Band Wi-Fi 6</strong> (support Beamforming, MU-MIMO, Client Isolation).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-lg mb-2">
+                        <span class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm">2</span>
+                        Kasus: Transfer File Lambat & High Latency di Lab Komputer SMK
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
+                        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <h5 class="font-bold text-rose-900 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Permasalahan (Problem)</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Saat 40 PC siswa mendownload file gambar kerja sebesar 2GB dari server lokal bersamaan, transfer rate drop hingga 1 MB/s dan pingsan paket data tinggi.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h5 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Analisis Kebutuhan</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Ditemukan switch yang dipakai masih kelas <strong>Fast Ethernet (10/100 Mbps)</strong> dengan kabel Cat5 tua. Port Uplink ke server menjadi *bottleneck* parah karena hanya bernilai max 100Mbps dibagi 40 PC.
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-emerald-900 mb-1"><i class="fa-solid fa-square-check mr-1"></i> Solusi Perangkat Optimal</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Re-cabling ke <strong>Kabel UTP Cat6 Gigabit</strong> + Ganti switch ke <strong>Managed Gigabit Switch 48-Port dengan Dual SFP+ Uplink 10Gbps</strong> langsung menuju LAN Card Server.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-lg mb-2">
+                        <span class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm">3</span>
+                        Kasus: Kebocoran Data & Konflik IP antar Divisi Keuangan dan Tamu Kantor
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
+                        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <h5 class="font-bold text-rose-900 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Permasalahan (Problem)</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Tamu kantor yang menyambung Wi-Fi bisa melihat folder *shared* berisi slip gaji di PC Keuangan, dan sering terjadi IP Address Conflict yang mematikan koneksi PC Direktur.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h5 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Analisis Kebutuhan</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Topologi jaringan bersifat **Flat Network** (semua perangkat dalam 1 IP Broadcast Subnet yang sama, menggunakan unmanaged switch biasa).
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-emerald-900 mb-1"><i class="fa-solid fa-square-check mr-1"></i> Solusi Perangkat Optimal</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Menerapkan <strong>Managed L2/L3 Switch dengan Segmentasi VLAN</strong> (VLAN 10: Keuangan, VLAN 20: Staff, VLAN 30: Guest Wi-Fi) + Dibuatkan Inter-VLAN Firewall ACL di Router untuk memblokir akses Guest ke VLAN Keuangan.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-lg mb-2">
+                        <span class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm">4</span>
+                        Kasus: Kamera IP CCTV Sering Offline di Gudang Luar Area (Jarak 150m)
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
+                        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <h5 class="font-bold text-rose-900 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Permasalahan (Problem)</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Pemasangan IP Cam CCTV di pos satpam gudang dengan kabel UTP Cat5e sepanjang 150 meter dari switch utama sering putus-putus dan gambar patah-patah.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h5 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Analisis Kebutuhan</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Melanggar batas maksimum teori & fisik transmisi data kabel UTP Tembaga (maksimal 100 Meter). Sinyal mengalami redaman (*attenuation*) parah.
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-emerald-900 mb-1"><i class="fa-solid fa-square-check mr-1"></i> Solusi Perangkat Optimal</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Menggunakan <strong>Kabel Fiber Optic Single-Mode 2 Core</strong> + <strong>Sepasang Media Converter Fiber to Ethernet</strong> (atau Switch PoE lokal yang dihubungkan via modul SFP Optical).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 5 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-lg mb-2">
+                        <span class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm">5</span>
+                        Kasus: Internet Kantor Total Lumpuh Saat Kabel FO Indihome Putus
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
+                        <div class="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <h5 class="font-bold text-rose-900 mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Permasalahan (Problem)</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Perusahaan fintech mengalami kerugian besar saat kabel serat optik penyedia layanan internet utama terputus oleh galian jalan. Seluruh transaksi mati selama 6 jam.
+                            </p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h5 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Analisis Kebutuhan</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Ketiadaan sistem redundansi (*Single Point of Failure*) pada tautan WAN Internet dan ketidakmampuan router eksisting mengelola lebih dari 1 jalur ISP.
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-emerald-900 mb-1"><i class="fa-solid fa-square-check mr-1"></i> Solusi Perangkat Optimal</h5>
+                            <p class="text-slate-700 leading-relaxed">
+                                Implementasi <strong>Dual WAN Load Balancing & Failover Router</strong> (MikroTik / FortiGate) dengan melanggan 2 ISP berbeda (ISP A: Fiber Optic Dedicated, ISP B: Wireless Broadband/GSM Backup).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 5: UJI KOMPETENSI (20 SOAL)
+             ========================================== -->
+        <section id="tab-5" class="tab-content space-y-8">
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-block bg-indigo-500/30 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-400/30 mb-3">Modul 5: Evaluasi Akhir</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Uji Kompetensi Soal Pilihan Ganda Interaktif</h2>
+                    <p class="mt-2 text-indigo-200 text-sm sm:text-base leading-relaxed">
+                        Jawablah 20 soal komprehensif berikut untuk mengukur pemahaman materi identifikasi & analisis pemilihan perangkat jaringan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quiz Container -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+                
+                <div id="quiz-questions-container" class="space-y-6">
+                    <!-- Questions generated dynamically via Javascript for clean code and instant checking -->
+                </div>
+
+                <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button onclick="submitQuiz()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim & Hitung Nilai
+                    </button>
+                    <div id="quiz-score-badge" class="hidden text-center sm:text-right">
+                        <span class="text-xs text-slate-500 block">Skor Akhir Anda:</span>
+                        <span id="quiz-score-text" class="text-2xl font-black text-indigo-600">0 / 100</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>© 2026 Modul Pembelajaran Interaktif KK TKJ - SMK Teknik Komputer dan Jaringan.</p>
+            <p class="text-slate-500">Materi Standar Kurikulum Kejuruan TKJ: Identifikasi & Analisis Perangkat Jaringan.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT CORE LOGIC -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tabs
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active style from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+                btn.classList.add('text-indigo-300');
+            });
+
+            // Show current tab
+            const targetContent = document.getElementById(tabId);
+            if(targetContent) {
+                targetContent.classList.add('active');
+            }
+
+            // Highlight current button
+            const targetBtn = document.getElementById('btn-' + tabId);
+            if(targetBtn) {
+                targetBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+                targetBtn.classList.remove('text-indigo-300');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function calculateRequirement() {
+            const wired = parseInt(document.getElementById('calc-wired').value) || 0;
+            const wireless = parseInt(document.getElementById('calc-wireless').value) || 0;
+            const bw = parseInt(document.getElementById('calc-bandwidth').value) || 0;
+
+            const totalPortsNeeded = Math.ceil(wired * 1.25); // 25% spare margin
+            let switchRec = "";
+            let routerRec = "";
+            let apRec = "";
+
+            // Switch Logic
+            if(totalPortsNeeded <= 8) {
+                switchRec = "1x Switch 8-Port Gigabit Ethernet";
+            } else if(totalPortsNeeded <= 16) {
+                switchRec = "1x Switch Managed 16-Port Gigabit";
+            } else if(totalPortsNeeded <= 24) {
+                switchRec = "1x Switch Managed 24-Port Gigabit (Support VLAN & SFP)";
+            } else if(totalPortsNeeded <= 48) {
+                switchRec = "1x Switch Managed 48-Port Gigabit PoE+ (370W Power Budget)";
+            } else {
+                const switch48Count = Math.ceil(totalPortsNeeded / 48);
+                switchRec = `${switch48Count}x Switch Managed 48-Port Gigabit Stackable dengan Port Uplink 10G SFP+`;
+            }
+
+            // Router Logic
+            const totalUsers = wired + wireless;
+            if(totalUsers < 20) {
+                routerRec = "Router MikroTik RB750Gr3 (hEX) / Broadband Wireless Router";
+            } else if(totalUsers < 80) {
+                routerRec = "Router MikroTik RB3011UiAS / RB4011 iGS+RM";
+            } else if(totalUsers < 200) {
+                routerRec = "Router MikroTik RB1100AHx4 / Cisco ISR 1100 Series";
+            } else {
+                routerRec = "Router MikroTik Cloud Core CCR2004 / Enterprise Firewall FortiGate 60F";
+            }
+
+            // AP Logic
+            const apCount = Math.max(1, Math.ceil(wireless / 30));
+            apRec = `${apCount} Unit Access Point Ceiling Dual Band Wi-Fi 6 (High Concurrency Managed via Controller)`;
+
+            const listContainer = document.getElementById('calc-list');
+            listContainer.innerHTML = `
+                <li><strong>Estimasi Port Aman (Margin 25%):</strong> ${totalPortsNeeded} Port</li>
+                <li><strong>Rekomendasi Router Utama:</strong> ${routerRec}</li>
+                <li><strong>Rekomendasi Switch:</strong> ${switchRec}</li>
+                <li><strong>Rekomendasi Wi-Fi Access Point:</strong> ${apRec}</li>
+                <li><strong>Estimasi Alokasi Bandwidth Per User:</strong> ~${(bw / (totalUsers || 1)).toFixed(2)} Mbps / User</li>
+            `;
+
+            document.getElementById('calc-result').classList.remove('hidden');
+        }
+
+        const quizData = [
+            {
+                q: "1. Perangkat jaringan aktif yang berfungsi mentransmisikan paket data antar IP Subnet yang berbeda dinamakan...",
+                options: ["Switch Unmanaged", "Router", "Media Converter", "Patch Panel"],
+                answer: 1,
+                explain: "Router beroperasi pada Layer 3 OSI (Network Layer) dan bertugas menghubungkan segmen IP subnet yang berbeda."
+            },
+            {
+                q: "2. Jenis kabel UTP yang memiliki spline separator plastik di tengahnya dan mendukung bandwidth hingga 250 MHz adalah...",
+                options: ["Cat5", "Cat5e", "Cat6", "Cat3"],
+                answer: 2,
+                explain: "Kabel Cat6 dilengkapi pemicu fisik silang (spline) di tengahnya untuk mengurangi crosstalk & mendukung frekuensi hingga 250 MHz."
+            },
+            {
+                q: "3. Standar kabel serat optik (Fiber Optic) yang memiliki diameter core sangat kecil (9 micron) dan digunakan untuk jarak jauh adalah...",
+                options: ["Multi-Mode OM3", "Single-Mode OS2", "STP Cable", "Coaxial"],
+                answer: 1,
+                explain: "Single-mode Memiliki core kecil 9 micron sehingga cahaya merambat lurus tanpa pemantulan masif, cocok untuk transmisi belasan km."
+            },
+            {
+                q: "4. Port spesifik pada switch/router yang digunakan untuk memasang modul transceiver optik SFP dinamakan...",
+                options: ["Console Port", "SFP Slot / Port Uplink", "RJ-45 Port", "USB Terminal"],
+                answer: 1,
+                explain: "Slot SFP (Small Form-factor Pluggable) digunakan untuk menyisipkan modul FO transceiver."
+            },
+            {
+                q: "5. Teknologi pada switch yang memungkinkan kabel Ethernet mentransmisikan arus listrik sekaligus data ke Access Point adalah...",
+                options: ["VLAN", "PoE (Power over Ethernet)", "Spanning Tree Protocol", "LACP"],
+                answer: 1,
+                explain: "PoE (IEEE 802.3af/at/bt) menyalurkan daya listrik DC melalui pin pasangan kabel LAN UTP."
+            },
+            {
+                q: "6. Jika di laboratorium SMK terdapat 40 unit PC client, jumlah port minimum switch yang direkomendasikan adalah...",
+                options: ["16 Port", "24 Port", "48 Port", "8 Port"],
+                answer: 2,
+                explain: "Ukuran standar switch di atas 40 port adalah 48 Port, sekaligus memberikan cadangan port."
+            },
+            {
+                q: "7. Fitur pada switch managed L2 yang berfungsi membagi satu fisik switch menjadi beberapa jaringan broadcast terisolasi adalah...",
+                options: ["DHCP Snooping", "VLAN (Virtual Local Area Network)", "NAT", "Port Forwarding"],
+                answer: 1,
+                explain: "VLAN membagi domain broadcast secara logis pada switch L2/L3."
+            },
+            {
+                q: "8. Perangkat pasif jaringan yang terpasang di rack server untuk merapikan terminasi ujung kabel horizontal LAN dinamakan...",
+                options: ["Access Point", "Patch Panel", "Modem ONT", "Cable Tester"],
+                answer: 1,
+                explain: "Patch panel digunakan sebagai titik terminasi terpusat kabel horizontal dari wallplate/meja kerja ke rack server."
+            },
+            {
+                q: "9. Karakteristik utama dari Switch Unmanaged adalah...",
+                options: ["Memiliki IP Address untuk remote CLI", "Dapat dikonfigurasi VLAN", "Plug-and-play tanpa fitur manajemen", "Dapat menjalankan OSPF routing"],
+                answer: 2,
+                explain: "Switch unmanaged bekerja secara otomatis (plug and play) tanpa antarmuka konfigurasi."
+            },
+            {
+                q: "10. Protokol yang mencegah terjadinya perulangan lalu lintas data (looping) akibat kesalahan pemasangan kabel antar switch adalah...",
+                options: ["STP (Spanning Tree Protocol)", "RIP", "HTTP", "FTP"],
+                answer: 0,
+                explain: "STP memblokir port redundant secara otomatis jika terdeteksi ketersambungan melingkar (looping)."
+            },
+            {
+                q: "11. Perangkat terminating serat optik FTTH dari ISP yang berada di rumah pelanggan dinamakan...",
+                options: ["Access Point Outdoor", "ONT / ONU (Optical Network Terminal)", "Core Router", "Hardware Firewall"],
+                answer: 1,
+                explain: "ONT/ONU mengubah sinyal cahaya optik dari kabel dropcore ISP menjadi sinyal Ethernet/Wi-Fi."
+            },
+            {
+                q: "12. Untuk menghubungkan dua switch managed yang membawa beberapa VLAN ID sekaligus, mode port interkoneksinya harus diset ke...",
+                options: ["Mode Access", "Mode Trunk", "Mode Promiscuous", "Mode Dynamic Auto"],
+                answer: 1,
+                explain: "Port Trunk bertugas menyalurkan lalu lintas multiple VLAN (tagged 802.1Q) antar perangkat switch/router."
+            },
+            {
+                q: "13. Panjang jarak maksimum teoritis transmisi sinyal data pada kabel UTP tanpa bantuan repeater/switch adalah...",
+                options: ["50 Meter", "100 Meter", "200 Meter", "500 Meter"],
+                answer: 1,
+                explain: "Batas standar IEEE 802.3 untuk kabel UTP copper adalah 100 meter."
+            },
+            {
+                q: "14. Istilah untuk penggabungan dua atau lebih port fisik Ethernet menjadi satu jalur logis berkapasitas ganda adalah...",
+                options: ["Link Aggregation / LACP", "Port Mirroring", "Subnetting", "Bandwidth Shaper"],
+                answer: 0,
+                explain: "LACP (Link Aggregation Control Protocol) menggabungkan bandwidth multiple interface fisik."
+            },
+            {
+                q: "15. Jalur kabel jaringan backbone antar gedung sejauh 2 km paling ideal menggunakan media...",
+                options: ["Kabel UTP Cat6a", "Kabel STP Cat5e", "Kabel Fiber Optic Single-Mode", "Kabel Coaxial"],
+                answer: 2,
+                explain: "FO Single-mode tahan induksi petir/cuaca dan jangkauannya mencapai puluhan km."
+            },
+            {
+                q: "16. Pada Cisco IOS, perintah CLI yang digunakan untuk masuk dari mode User EXEC ke Privilege EXEC adalah...",
+                options: ["configure terminal", "enable", "show ip route", "interface fa0/1"],
+                answer: 1,
+                explain: "Perintah 'enable' mengubah prompt dari Router> menjadi Router#."
+            },
+            {
+                q: "17. Fitur keamanan Wi-Fi yang mengisolasi antar perangkat wireless agar tidak bisa saling berkomunikasi dinamakan...",
+                options: ["AP Isolation / Client Isolation", "MAC Filtering", "WPA3 Enterprise", "SSID Broadcast"],
+                answer: 0,
+                explain: "AP Isolation mencegah serangan lokal ARP Spoofing/Sniffing antar sesama client Wi-Fi."
+            },
+            {
+                q: "18. Modul fisik penyambung antar media tembaga (RJ45) ke media serat optik pada port Ethernet biasa disebut...",
+                options: ["SFP Module / Media Converter", "Access Card", "Splitter Passive", "Keystone Jack"],
+                answer: 0,
+                explain: "Media converter mengubah sinyal elektrik ke fotonik/cahaya."
+            },
+            {
+                q: "19. Apabila sebuah perusahaan ingin menjamin internet tidak mati saat salah satu ISP putus, teknologi yang harus disiapkan di router adalah...",
+                options: ["DHCP Server", "Failover & Dual WAN Load Balancing", "Virtual Private Network", "Bandwidth Limiter"],
+                answer: 1,
+                explain: "Dual WAN Failover mengalihkan trafik ke ISP cadangan saat ISP utama down."
+            },
+            {
+                q: "20. Perintah CLI Cisco untuk mengaktifkan antarmuka (interface) yang dalam kondisi shutdown adalah...",
+                options: ["enable interface", "no shutdown", "start port", "ip address auto"],
+                answer: 1,
+                explain: "Perintah 'no shutdown' mengubah status interface Cisco dari administratively down menjadi UP."
+            }
+        ];
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-questions-container');
+            if(!container) return;
+
+            let html = "";
+            quizData.forEach((item, index) => {
+                html += `
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+                        <p class="font-bold text-slate-900 text-sm">${item.q}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                `;
+                
+                item.options.forEach((opt, optIdx) => {
+                    html += `
+                        <label class="flex items-center space-x-2 p-2 bg-white rounded-lg border border-slate-200 cursor-pointer hover:bg-indigo-50/50 transition">
+                            <input type="radio" name="q_${index}" value="${optIdx}" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-slate-700">${opt}</span>
+                        </label>
+                    `;
+                });
+
+                html += `
+                        </div>
+                        <div id="explain_${index}" class="hidden mt-2 p-3 bg-indigo-50 rounded-lg text-xs text-indigo-900 border border-indigo-200">
+                            <strong>Penjelasan:</strong> ${item.explain}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function submitQuiz() {
+            let correctCount = 0;
+            quizData.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q_${index}"]:checked`);
+                const explainBox = document.getElementById(`explain_${index}`);
+
+                if(explainBox) explainBox.classList.remove('hidden');
+
+                if(selected && parseInt(selected.value) === item.answer) {
+                    correctCount++;
+                }
+            });
+
+            const totalScore = Math.round((correctCount / quizData.length) * 100);
+            const scoreBadge = document.getElementById('quiz-score-badge');
+            const scoreText = document.getElementById('quiz-score-text');
+
+            if(scoreBadge && scoreText) {
+                scoreBadge.classList.remove('hidden');
+                scoreText.textContent = `${totalScore} / 100 (${correctCount} Benar)`;
+                
+                if(totalScore >= 75) {
+                    scoreText.className = "text-2xl font-black text-emerald-600";
+                } else {
+                    scoreText.className = "text-2xl font-black text-rose-600";
+                }
+            }
+        }
+
+        // Initialize quiz on page load
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
